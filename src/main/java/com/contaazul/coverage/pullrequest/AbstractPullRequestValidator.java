@@ -22,14 +22,14 @@ import com.contaazul.coverage.github.PullRequestComment;
 import com.contaazul.coverage.github.PullRequestSHARetriever;
 import com.google.common.collect.Lists;
 
-public class PullRequestValidatorImpl implements PullRequestValidator {
+public abstract class AbstractPullRequestValidator implements PullRequestValidator {
 	private static final Logger logger = LoggerFactory.getLogger( PullRequestValidator.class );
 	private final int minCoverage;
 	private final GithubService gh;
 	private ClazzMapper mapper;
 	private final PullRequestSHARetriever shas;
 
-	public PullRequestValidatorImpl(GithubService gh, Coverage coverage, String srcFolder, int minCoverage) {
+	public AbstractPullRequestValidator(GithubService gh, Coverage coverage, String srcFolder, int minCoverage) {
 		this.gh = gh;
 		this.minCoverage = minCoverage;
 		this.mapper = new ClazzMapperImpl( coverage, srcFolder );
@@ -100,7 +100,7 @@ public class PullRequestValidatorImpl implements PullRequestValidator {
 	}
 
 	private void checkTotalCoverage(Cobertura cobertura) {
-		if (cobertura.isLowerThan( minCoverage ))
+		if (breakOnLowCoverage() && cobertura.isLowerThan( minCoverage ))
 			throw new UndercoveredException( cobertura, minCoverage );
 		else
 			logger.info( String.format(
@@ -108,6 +108,8 @@ public class PullRequestValidatorImpl implements PullRequestValidator {
 					cobertura.getCoverage(),
 					minCoverage ) );
 	}
+
+	protected abstract boolean breakOnLowCoverage();
 
 	private Cobertura nullCobertura() {
 		logger.debug( "Null Cobertura" );
