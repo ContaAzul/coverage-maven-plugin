@@ -1,7 +1,6 @@
 package com.contaazul.coverage.pullrequest;
 
 import java.util.List;
-
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -20,6 +19,7 @@ import com.contaazul.coverage.git.OneToOneLinePositioner;
 import com.contaazul.coverage.git.PatchLinePositioner;
 import com.contaazul.coverage.github.GithubService;
 import com.contaazul.coverage.github.PullRequestComment;
+import com.contaazul.coverage.github.PullRequestCommitComment;
 import com.contaazul.coverage.github.PullRequestSHARetriever;
 import com.google.common.collect.Lists;
 
@@ -103,10 +103,15 @@ public abstract class AbstractPullRequestValidator implements PullRequestValidat
 	}
 
 	private void checkTotalCoverage(Cobertura cobertura) {
-		if (breakOnLowCoverage() && cobertura.isLowerThan( minCoverage ))
+		logger.info( String.format( MESSAGE, cobertura.getCoverage(), minCoverage ) );
+		if (cobertura.isLowerThan( minCoverage ))
+			blameLowCoverage( cobertura );
+	}
+
+	private void blameLowCoverage(Cobertura cobertura) {
+		gh.createComment( PullRequestComment.MSG );
+		if (breakOnLowCoverage())
 			throw new UndercoveredException( cobertura, minCoverage );
-		else
-			logger.info( String.format( MESSAGE, cobertura.getCoverage(), minCoverage ) );
 	}
 
 	protected abstract boolean breakOnLowCoverage();
@@ -121,7 +126,7 @@ public abstract class AbstractPullRequestValidator implements PullRequestValidat
 				+ position );
 		String sha = shas.get( cf );
 		String filename = cf.getFilename();
-		PullRequestComment comment = new PullRequestComment( coverage, minCoverage, sha,
+		PullRequestCommitComment comment = new PullRequestCommitComment( coverage, minCoverage, sha,
 				filename, position );
 		gh.createComment( comment );
 	}

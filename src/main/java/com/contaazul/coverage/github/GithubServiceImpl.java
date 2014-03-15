@@ -6,6 +6,7 @@ import java.util.List;
 import org.eclipse.egit.github.core.CommitFile;
 import org.eclipse.egit.github.core.Repository;
 import org.eclipse.egit.github.core.client.GitHubClient;
+import org.eclipse.egit.github.core.service.IssueService;
 import org.eclipse.egit.github.core.service.PullRequestService;
 import org.eclipse.egit.github.core.service.RepositoryService;
 import org.slf4j.Logger;
@@ -19,6 +20,8 @@ public class GithubServiceImpl implements GithubService {
 	private final GithubRepo repo;
 	private PullRequestService prService;
 	private RepositoryService repoService;
+
+	private IssueService issueService;
 
 	public GithubServiceImpl(GithubRepo repo, String oauth2, int pullRequestId) {
 		this.repo = repo;
@@ -78,6 +81,19 @@ public class GithubServiceImpl implements GithubService {
 	/*
 	 * (non-Javadoc)
 	 * 
+	 * @see com.contaazul.coverage.github.GithubService#getPullRequestService()
+	 */
+	@Override
+	public IssueService getIssueService() {
+		if (issueService == null)
+			issueService = new IssueService( client );
+		return issueService;
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.contaazul.coverage.github.GithubService#getFiles()
 	 */
 	@Override
@@ -97,19 +113,29 @@ public class GithubServiceImpl implements GithubService {
 	 * .coverage.github.PullRequestComment)
 	 */
 	@Override
-	public void createComment(PullRequestComment comment) {
+	public void createComment(PullRequestCommitComment comment) {
 		if (comment.isValid())
 			comment( comment );
 		else
 			logger.debug( "Comment is invalid: " + comment );
 	}
 
-	private void comment(PullRequestComment comment) {
+	private void comment(PullRequestCommitComment comment) {
 		logger.debug( "Commenting: " + comment );
 		try {
 			getPullRequestService()
 					.createComment( getRepository(), pullRequestId, comment.get() );
 		} catch (Exception e) {
+			logger.error( "Failed to comment on PullRequest " + pullRequestId + ": " + comment, e );
+		}
+	}
+
+	@Override
+	public void createComment(String comment) {
+		logger.debug( "Commenting: " + comment );
+		try {
+			getIssueService().createComment( getRepository(), pullRequestId, comment );
+		} catch (IOException e) {
 			logger.error( "Failed to comment on PullRequest " + pullRequestId + ": " + comment, e );
 		}
 	}
