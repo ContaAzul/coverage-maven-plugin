@@ -15,7 +15,7 @@ public class PullRequestValidatorBuilder {
 	private String oauth2;
 	private int pullRequestId = -1;
 	private GithubRepo repo;
-	private boolean breakOnLowCov;
+	private boolean breakOnLowCov = true;
 
 	public PullRequestValidatorBuilder() {
 	}

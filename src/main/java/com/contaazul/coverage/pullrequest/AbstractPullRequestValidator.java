@@ -1,6 +1,7 @@
 package com.contaazul.coverage.pullrequest;
 
 import java.util.List;
+
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -22,7 +23,9 @@ import com.contaazul.coverage.github.PullRequestComment;
 import com.contaazul.coverage.github.PullRequestSHARetriever;
 import com.google.common.collect.Lists;
 
+// XXX this class has too much responsibility.
 public abstract class AbstractPullRequestValidator implements PullRequestValidator {
+	private static final String MESSAGE = "The new lines added are with %.2f%% of %d%% minimum allowed code coverage.";
 	private static final Logger logger = LoggerFactory.getLogger( PullRequestValidator.class );
 	private final int minCoverage;
 	private final GithubService gh;
@@ -103,10 +106,7 @@ public abstract class AbstractPullRequestValidator implements PullRequestValidat
 		if (breakOnLowCoverage() && cobertura.isLowerThan( minCoverage ))
 			throw new UndercoveredException( cobertura, minCoverage );
 		else
-			logger.info( String.format(
-					"The new lines added are with %.2f%% of %d%% minimum allowed code coverage.",
-					cobertura.getCoverage(),
-					minCoverage ) );
+			logger.info( String.format( MESSAGE, cobertura.getCoverage(), minCoverage ) );
 	}
 
 	protected abstract boolean breakOnLowCoverage();

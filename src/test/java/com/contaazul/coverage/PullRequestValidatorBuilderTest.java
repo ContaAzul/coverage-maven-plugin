@@ -1,6 +1,6 @@
 package com.contaazul.coverage;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -59,6 +59,29 @@ public class PullRequestValidatorBuilderTest {
 				.project( project )
 				.build();
 		assertNotNull( validator );
+	}
 
+	@Test
+	public void testValidNonBreakeable() throws Exception {
+		PullRequestValidator validator = new PullRequestValidatorBuilder()
+				.minCoverage( 70 )
+				.oauth2( "not_really_an_oauth_token" )
+				.pullRequest( 2 )
+				.repository( repo )
+				.project( project )
+				.breakOnLowCov( false )
+				.build();
+		assertNotNull( validator );
+	}
+
+	@Test(expected = CoverageException.class)
+	public void testWithoutProject() throws Exception {
+		PullRequestValidator validator = new PullRequestValidatorBuilder()
+				.minCoverage( 70 )
+				.oauth2( "not_really_an_oauth_token" )
+				.pullRequest( 2 )
+				.repository( repo )
+				.build();
+		assertNull( validator );
 	}
 }

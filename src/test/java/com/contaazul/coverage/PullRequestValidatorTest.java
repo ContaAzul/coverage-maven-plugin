@@ -54,7 +54,7 @@ public class PullRequestValidatorTest {
 	@Test(expected = UndercoveredException.class)
 	public void testValidateInvalid() throws Exception {
 		when( clazz.getLines() ).thenReturn( Arrays.asList( new Line( 10, 20, false, null, null ) ) );
-		validator = new BuildBreakerPullRequestValidator( gh, cov, "src/main/java", 90 );
+		validator = new BuildBreakerPullRequestValidator( gh, cov, "src/main/java", 110 );
 		validator.validate();
 	}
 
