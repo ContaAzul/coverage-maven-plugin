@@ -18,8 +18,9 @@ import com.contaazul.coverage.cobertura.entity.Coverage;
 import com.contaazul.coverage.cobertura.entity.Line;
 import com.contaazul.coverage.cobertura.entity.Package;
 import com.contaazul.coverage.github.GithubService;
+import com.contaazul.coverage.pullrequest.BuildBreakerPullRequestValidator;
 import com.contaazul.coverage.pullrequest.PullRequestValidator;
-import com.contaazul.coverage.pullrequest.PullRequestValidatorImpl;
+import com.contaazul.coverage.pullrequest.AbstractPullRequestValidator;
 import com.contaazul.coverage.pullrequest.UndercoveredException;
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
@@ -50,10 +51,10 @@ public class PullRequestValidatorTest {
 
 	}
 
-	@Test
-	public void testValidateNoChanges() throws Exception {
-		when( clazz.getLines() ).thenReturn( Arrays.asList( new Line( 10, 0, false, null, null ) ) );
-		validator = new PullRequestValidatorImpl( gh, cov, "src/main/java", 90 );
+	@Test(expected = UndercoveredException.class)
+	public void testValidateInvalid() throws Exception {
+		when( clazz.getLines() ).thenReturn( Arrays.asList( new Line( 10, 20, false, null, null ) ) );
+		validator = new BuildBreakerPullRequestValidator( gh, cov, "src/main/java", 110 );
 		validator.validate();
 	}
 
@@ -67,7 +68,7 @@ public class PullRequestValidatorTest {
 		f.setPatch( patch );
 		f.setFilename( "src/main/java/com/contaazul/coverage/pullrequest/PullRequestValidatorImpl.java" );
 		when( gh.getPullRequestCommitFiles() ).thenReturn( Arrays.asList( f ) );
-		validator = new PullRequestValidatorImpl( gh, cov, "src/main/java", 0 );
+		validator = new BuildBreakerPullRequestValidator( gh, cov, "src/main/java", 0 );
 		validator.validate();
 	}
 }

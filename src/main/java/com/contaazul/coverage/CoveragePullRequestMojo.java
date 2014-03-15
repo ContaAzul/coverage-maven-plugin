@@ -54,6 +54,13 @@ public class CoveragePullRequestMojo extends AbstractMojo {
 	private int minimumCoverage;
 
 	/**
+	 * Wheter to break or not the build when low coverage.
+	 * 
+	 * @parameter property="fail"
+	 */
+	private boolean breakOnLowCov;
+
+	/**
 	 * Maven project info.
 	 * 
 	 * @parameter property="project"
@@ -79,6 +86,7 @@ public class CoveragePullRequestMojo extends AbstractMojo {
 				.repository( new GithubRepo( repositoryName, repositoryOwner ) )
 				.minCoverage( minimumCoverage )
 				.project( project )
+				.breakOnLowCov(breakOnLowCov)
 				.build();
 		validator.validate();
 	}

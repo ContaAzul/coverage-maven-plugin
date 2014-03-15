@@ -36,6 +36,7 @@ mvn clean install cobertura:cobertura \
   -Dgithub.repositoryOwner=${REPOSITORY_OWNER} \
   -Dgithub.repositoryName=${REPOSITORY_NAME} \
   -Dgithub.oauth2=${YOUR_OAUTH2_KEY} \
+  -Dfail=false \ # optional, defaults to true. If set to false, build will not break when in low coverage
   -DminCoverage=90 # the minimum acceptable coverage
 ```
 

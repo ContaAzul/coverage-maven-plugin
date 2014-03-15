@@ -1,6 +1,7 @@
 package com.contaazul.coverage.pullrequest;
 
 import java.util.List;
+
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -22,14 +23,16 @@ import com.contaazul.coverage.github.PullRequestComment;
 import com.contaazul.coverage.github.PullRequestSHARetriever;
 import com.google.common.collect.Lists;
 
-public class PullRequestValidatorImpl implements PullRequestValidator {
+// XXX this class has too much responsibility.
+public abstract class AbstractPullRequestValidator implements PullRequestValidator {
+	private static final String MESSAGE = "The new lines added are with %.2f%% of %d%% minimum allowed code coverage.";
 	private static final Logger logger = LoggerFactory.getLogger( PullRequestValidator.class );
 	private final int minCoverage;
 	private final GithubService gh;
 	private ClazzMapper mapper;
 	private final PullRequestSHARetriever shas;
 
-	public PullRequestValidatorImpl(GithubService gh, Coverage coverage, String srcFolder, int minCoverage) {
+	public AbstractPullRequestValidator(GithubService gh, Coverage coverage, String srcFolder, int minCoverage) {
 		this.gh = gh;
 		this.minCoverage = minCoverage;
 		this.mapper = new ClazzMapperImpl( coverage, srcFolder );
@@ -100,14 +103,13 @@ public class PullRequestValidatorImpl implements PullRequestValidator {
 	}
 
 	private void checkTotalCoverage(Cobertura cobertura) {
-		if (cobertura.isLowerThan( minCoverage ))
+		if (breakOnLowCoverage() && cobertura.isLowerThan( minCoverage ))
 			throw new UndercoveredException( cobertura, minCoverage );
 		else
-			logger.info( String.format(
-					"The new lines added are with %.2f%% of %d%% minimum allowed code coverage.",
-					cobertura.getCoverage(),
-					minCoverage ) );
+			logger.info( String.format( MESSAGE, cobertura.getCoverage(), minCoverage ) );
 	}
+
+	protected abstract boolean breakOnLowCoverage();
 
 	private Cobertura nullCobertura() {
 		logger.debug( "Null Cobertura" );

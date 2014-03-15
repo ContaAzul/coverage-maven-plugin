@@ -15,6 +15,7 @@ public class PullRequestValidatorBuilder {
 	private String oauth2;
 	private int pullRequestId = -1;
 	private GithubRepo repo;
+	private boolean breakOnLowCov = true;
 
 	public PullRequestValidatorBuilder() {
 	}
@@ -44,12 +45,24 @@ public class PullRequestValidatorBuilder {
 		return this;
 	}
 
+	public PullRequestValidatorBuilder breakOnLowCov(boolean breakOnLowCov) {
+		this.breakOnLowCov = breakOnLowCov;
+		return this;
+	}
+
 	public PullRequestValidator build() {
 		validate();
 		final GithubService gh = new GithubServiceImpl( repo, oauth2, pullRequestId );
 		final String src = project.getSrcFolder();
 		final Coverage coverage = project.getCoverage();
-		return new PullRequestValidatorImpl( gh, coverage, src, minCoverage );
+		return create( gh, src, coverage );
+	}
+
+	private PullRequestValidator create(final GithubService gh, final String src, final Coverage coverage) {
+		if (breakOnLowCov)
+			return new BuildBreakerPullRequestValidator( gh, coverage, src, minCoverage );
+		else
+			return new NonBuildBreakerPullRequestValidator( gh, coverage, src, minCoverage );
 	}
 
 	private void validate() {
