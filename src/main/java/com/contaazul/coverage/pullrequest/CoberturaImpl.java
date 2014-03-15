@@ -21,8 +21,8 @@ public class CoberturaImpl implements Cobertura {
 	@Override
 	public double getCoverage() {
 		logger.debug( "Count " + count );
-		if (coverage == 0 || count == 0)
-			return 0;
+		if (count == 0)
+			return 100;
 		return this.coverage / count;
 	}
 
