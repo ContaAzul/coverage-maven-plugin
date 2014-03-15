@@ -1,0 +1,94 @@
+From ca3d4235f2491b1a140c5da0fe5e0a410f107fc3 Mon Sep 17 00:00:00 2001
+From: Carlos Alexandro Becker <caarlos0@gmail.com>
+Date: Sat, 15 Mar 2014 13:04:19 -0300
+Subject: [PATCH 1/2] go
+
+---
+ .../com/contaazul/coverage/pullrequest/PullRequestValidatorImpl.java    | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/main/java/com/contaazul/coverage/pullrequest/PullRequestValidatorImpl.java b/src/main/java/com/contaazul/coverage/pullrequest/PullRequestValidatorImpl.java
+index 9dcae38..a4a4254 100644
+--- a/src/main/java/com/contaazul/coverage/pullrequest/PullRequestValidatorImpl.java
++++ b/src/main/java/com/contaazul/coverage/pullrequest/PullRequestValidatorImpl.java
+@@ -80,7 +80,7 @@ public void validate() {
+    }
+
+    int totalLines = gh.getPullRequestCommitFiles().size();
+-   logger.debug( "Coverage " + patchCoverage + " totalLines: " + totalLines );
++   logger.debug( "Patch coverage " + patchCoverage + " totalLines: " + totalLines );
+    checkTotalCoverage( patchCoverage / totalLines );
+  }
+
+--
+1.8.5.5
+
+
+From 054e6d55485b6ff281639a65670c1b9743c378ff Mon Sep 17 00:00:00 2001
+From: Carlos Alexandro Becker <caarlos0@gmail.com>
+Date: Sat, 15 Mar 2014 13:20:04 -0300
+Subject: [PATCH 2/2] bump
+
+---
+ .../pullrequest/PullRequestValidatorImpl.java         | 19 +++++++++++++------
+ 1 file changed, 13 insertions(+), 6 deletions(-)
+
+diff --git a/src/main/java/com/contaazul/coverage/pullrequest/PullRequestValidatorImpl.java b/src/main/java/com/contaazul/coverage/pullrequest/PullRequestValidatorImpl.java
+index a4a4254..df9f4e9 100644
+--- a/src/main/java/com/contaazul/coverage/pullrequest/PullRequestValidatorImpl.java
++++ b/src/main/java/com/contaazul/coverage/pullrequest/PullRequestValidatorImpl.java
+@@ -55,7 +55,7 @@ public void validate() {
+      logger.debug( "Filename: " + cf.getFilename() );
+
+      int coverageAccumulator = 0;
+-     int lastLine = 0;
++     int lastLine = -1;
+      int firstLine = -1;
+
+      for (Entry<Integer, Integer> entry : positioner.getLinesAdded().entrySet()) {
+@@ -64,9 +64,13 @@ public void validate() {
+
+        if (firstLine == -1)
+          firstLine = line;
++       if (lastLine == -1)
++         lastLine = line;
+
+-       logger.debug( "Line " + line + " coverage " + cov );
++       coverageAccumulator += cov;
+
++       logger.debug( "Line " + line + " coverage " + cov );
++       logger.debug( "Coverage acc: " + coverageAccumulator );
+        if (isEndOfChunk( line, lastLine )) {
+          calcChunckCoverage( cf, positioner, coverageAccumulator, lastLine, firstLine );
+          patchCoverage += coverageAccumulator;
+@@ -74,7 +78,6 @@ public void validate() {
+          coverageAccumulator = 0;
+        }
+
+-       coverageAccumulator += cov;
+        lastLine = line;
+      }
+    }
+@@ -85,13 +88,17 @@ public void validate() {
+  }
+
+  private void calcChunckCoverage(CommitFile cf, LinePositioner positioner, int sum, int lastLine, int firstLine) {
+-   final int totalLines = lastLine - firstLine;
++   logger.debug( "lasline " + lastLine + " firstline " + firstLine + " sum " + sum );
++   int totalLines = lastLine - firstLine;
++   if (totalLines == 0)
++     totalLines = 1;
+    final double fileCoverage = sum / totalLines;
+    final int position = positioner.toPosition( lastLine );
++   logger.debug( "File " + cf.getFilename() + " lastLine " + lastLine + " chunk with " + totalLines
++       + " lines has " + fileCoverage
++       + " tests coverage!" );
+    if (isLowerThanAllowedCoverage( fileCoverage ))
+      blameChunck( cf, fileCoverage, position );
+-   logger.debug( "File " + cf.getFilename() + " lastLine " + lastLine + " has " + fileCoverage
+-       + " tests coverage!" );
+  }
+
+  private boolean isLowerThanAllowedCoverage(double fileCoverage) {
+--
+1.8.5.5
