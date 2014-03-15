@@ -50,9 +50,9 @@ public class PullRequestValidatorTest {
 
 	}
 
-	@Test(expected = UndercoveredException.class)
-	public void testValidateInvalid() throws Exception {
-		when( clazz.getLines() ).thenReturn( Arrays.asList( new Line( 10, 20, false, null, null ) ) );
+	@Test
+	public void testValidateNoChanges() throws Exception {
+		when( clazz.getLines() ).thenReturn( Arrays.asList( new Line( 10, 0, false, null, null ) ) );
 		validator = new PullRequestValidatorImpl( gh, cov, "src/main/java", 90 );
 		validator.validate();
 	}
