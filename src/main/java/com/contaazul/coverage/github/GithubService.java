@@ -9,16 +9,16 @@ import org.eclipse.egit.github.core.service.RepositoryService;
 
 public interface GithubService {
 
-	public abstract RepositoryService getRepositoryService();
+	RepositoryService getRepositoryService();
 
-	public abstract Repository getRepository();
+	Repository getRepository();
 
-	public abstract List<CommitFile> getPullRequestCommitFiles();
+	List<CommitFile> getPullRequestCommitFiles();
 
-	public abstract PullRequestService getPullRequestService();
+	PullRequestService getPullRequestService();
 
-	public abstract List<CommitFile> getFiles();
+	List<CommitFile> getFiles();
 
-	public abstract void createComment(PullRequestComment comment);
+	void createComment(PullRequestComment comment);
 
 }

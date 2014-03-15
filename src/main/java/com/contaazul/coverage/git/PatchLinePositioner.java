@@ -3,7 +3,6 @@ package com.contaazul.coverage.git;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newLinkedHashMap;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -43,20 +42,19 @@ public class PatchLinePositioner implements LinePositioner {
 
 	@Override
 	public List<Map<Integer, Integer>> getChunks() {
-		final List<Map<Integer, Integer>> chuncks = newArrayList();
+		final List<Map<Integer, Integer>> chunks = newArrayList();
 		int lastLine = -1;
 		for (final Entry<Integer, Integer> line : getLinesAdded().entrySet()) {
 			if (line.getKey() == lastLine + 1)
-				chuncks.get( chuncks.size() - 1 ).put( line.getKey(), line.getValue() );
+				chunks.get( chunks.size() - 1 ).put( line.getKey(), line.getValue() );
 			else
-				chuncks.add( newHash( line ) );
+				chunks.add( newChunk( line ) );
 			lastLine = line.getKey();
 		}
-
-		return chuncks;
+		return chunks;
 	}
 
-	private Map<Integer, Integer> newHash(Entry<Integer, Integer> line) {
+	private Map<Integer, Integer> newChunk(Entry<Integer, Integer> line) {
 		final Map<Integer, Integer> hash = newLinkedHashMap();
 		hash.put( line.getKey(), line.getValue() );
 		return hash;

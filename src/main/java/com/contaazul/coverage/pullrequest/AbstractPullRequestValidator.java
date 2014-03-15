@@ -72,23 +72,23 @@ public abstract class AbstractPullRequestValidator implements PullRequestValidat
 	private Cobertura analyseChunk(Map<Integer, Integer> chunk, CommitFile file, LineCoverager coverager,
 			LinePositioner positioner) {
 		logger.debug( "Analysing chunk " + chunk );
-		Cobertura chunckCoverage = getChunkCoverage( chunk, coverager );
-		if (chunckCoverage.isLowerThan( minCoverage ))
-			blameChunck( file, chunckCoverage.getCoverage(), positioner.toPosition( chunckCoverage.getLastLine() ) );
-		return chunckCoverage;
+		Cobertura chunkCoverage = getChunkCoverage( chunk, coverager );
+		if (chunkCoverage.isLowerThan( minCoverage ))
+			blameChunk( file, chunkCoverage.getCoverage(), positioner.toPosition( chunkCoverage.getLastLine() ) );
+		return chunkCoverage;
 	}
 
 	private Cobertura getChunkCoverage(Map<Integer, Integer> chunk, LineCoverager coverager) {
-		final Cobertura chunckCoverage = new CoberturaImpl();
+		final Cobertura chunkCoverage = new CoberturaImpl();
 		for (Entry<Integer, Integer> line : chunk.entrySet())
-			analyseLine( coverager, chunckCoverage, line.getKey() );
-		return chunckCoverage;
+			analyseLine( coverager, chunkCoverage, line.getKey() );
+		return chunkCoverage;
 	}
 
-	private void analyseLine(LineCoverager coverager, Cobertura chunckCoverage, int line) {
+	private void analyseLine(LineCoverager coverager, Cobertura chunkCoverage, int line) {
 		final Integer lineCoverage = coverager.getLineCoverage( line );
 		if (lineCoverage != null)
-			chunckCoverage.incrementCoverage( line, lineCoverage );
+			chunkCoverage.incrementCoverage( line, lineCoverage );
 	}
 
 	private Cobertura map(List<Cobertura> coverages) {
@@ -116,7 +116,7 @@ public abstract class AbstractPullRequestValidator implements PullRequestValidat
 		return new NullCobertura();
 	}
 
-	private void blameChunck(CommitFile cf, double coverage, int position) {
+	private void blameChunk(CommitFile cf, double coverage, int position) {
 		logger.debug( "Blamming chunk on " + cf.getFilename() + " for the coverage " + coverage + " in position "
 				+ position );
 		String sha = shas.get( cf );
