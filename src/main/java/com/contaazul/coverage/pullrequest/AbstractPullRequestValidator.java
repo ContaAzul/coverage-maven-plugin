@@ -48,12 +48,11 @@ public abstract class AbstractPullRequestValidator implements PullRequestValidat
 	public void validate() {
 		final List<Cobertura> coberturas = Lists.newArrayList();
 		for (CommitFile file : gh.getPullRequestCommitFiles())
-			add( coberturas, file );
+			add( coberturas, getCobertura( file ) );
 		checkTotalCoverage( map( coberturas ) );
 	}
 
-	private void add(final List<Cobertura> coberturas, CommitFile file) {
-		final Cobertura cobertura = getCobertura( file );
+	private void add(final List<Cobertura> coberturas, Cobertura cobertura) {
 		if (cobertura.isCounted())
 			coberturas.add( cobertura );
 	}
@@ -74,7 +73,7 @@ public abstract class AbstractPullRequestValidator implements PullRequestValidat
 	private Cobertura analyseFile(CommitFile file, final LinePositioner positioner, final LineCoverager coverager) {
 		final List<Cobertura> fileCoverage = Lists.newArrayList();
 		for (Map<Integer, Integer> chunk : positioner.getChunks())
-			fileCoverage.add( analyseChunk( chunk, file, coverager, positioner ) );
+			add( fileCoverage, analyseChunk( chunk, file, coverager, positioner ) );
 		return map( fileCoverage );
 	}
 
@@ -102,9 +101,8 @@ public abstract class AbstractPullRequestValidator implements PullRequestValidat
 
 	private Cobertura map(List<Cobertura> coverages) {
 		Cobertura coverage = new CoberturaImpl();
-		for (Cobertura cov : coverages) {
+		for (Cobertura cov : coverages)
 			coverage.incrementCoverage( cov.getCoverage() );
-		}
 		return coverage;
 	}
 
@@ -115,7 +113,7 @@ public abstract class AbstractPullRequestValidator implements PullRequestValidat
 	}
 
 	private void blameLowCoverage(Cobertura cobertura) {
-		gh.createComment( PullRequestComment.MSG + "\n"
+		gh.createComment( PullRequestComment.MSG + "\n\n"
 				+ String.format( UndercoveredException.MSG, cobertura.getCoverage(), minCoverage ) );
 		if (breakOnLowCoverage())
 			throw new UndercoveredException( cobertura, minCoverage );
