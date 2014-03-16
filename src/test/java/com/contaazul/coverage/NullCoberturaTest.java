@@ -1,6 +1,7 @@
 package com.contaazul.coverage;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
@@ -24,5 +25,6 @@ public class NullCoberturaTest {
 		assertEquals( 0.0, cobertura.getCoverage(), 0.0001 );
 		assertEquals( -1, cobertura.getLastLine() );
 		assertTrue( cobertura.isLowerThan( 42 ) );
+		assertFalse( cobertura.isCounted() );
 	}
 }
