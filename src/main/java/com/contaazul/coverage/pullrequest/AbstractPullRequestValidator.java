@@ -109,7 +109,8 @@ public abstract class AbstractPullRequestValidator implements PullRequestValidat
 	}
 
 	private void blameLowCoverage(Cobertura cobertura) {
-		gh.createComment( PullRequestComment.MSG );
+		gh.createComment( PullRequestComment.MSG + "\n"
+				+ String.format( UndercoveredException.MSG, cobertura.getCoverage(), minCoverage ) );
 		if (breakOnLowCoverage())
 			throw new UndercoveredException( cobertura, minCoverage );
 	}
