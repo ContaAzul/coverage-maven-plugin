@@ -24,4 +24,9 @@ public class NullCobertura implements Cobertura {
 	public boolean isLowerThan(int allowed) {
 		return true;
 	}
+
+	@Override
+	public boolean isCounted() {
+		return false;
+	}
 }

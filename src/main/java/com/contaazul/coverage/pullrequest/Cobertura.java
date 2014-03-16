@@ -11,8 +11,10 @@ public interface Cobertura {
 	double getCoverage();
 
 	void incrementCoverage(int line, int coverage);
-	
+
 	int getLastLine();
-	
+
 	boolean isLowerThan(int allowed);
+
+	boolean isCounted();
 }
