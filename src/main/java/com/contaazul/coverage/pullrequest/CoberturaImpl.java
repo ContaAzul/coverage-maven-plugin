@@ -35,4 +35,9 @@ public class CoberturaImpl implements Cobertura {
 	public boolean isLowerThan(int allowed) {
 		return getCoverage() < allowed;
 	}
+
+	@Override
+	public boolean isCounted() {
+		return true;
+	}
 }

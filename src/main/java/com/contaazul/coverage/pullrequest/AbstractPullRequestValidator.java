@@ -48,8 +48,14 @@ public abstract class AbstractPullRequestValidator implements PullRequestValidat
 	public void validate() {
 		final List<Cobertura> coberturas = Lists.newArrayList();
 		for (CommitFile file : gh.getPullRequestCommitFiles())
-			coberturas.add( getCobertura( file ) );
+			add( coberturas, file );
 		checkTotalCoverage( map( coberturas ) );
+	}
+
+	private void add(final List<Cobertura> coberturas, CommitFile file) {
+		final Cobertura cobertura = getCobertura( file );
+		if (cobertura.isCounted())
+			coberturas.add( cobertura );
 	}
 
 	private Cobertura getCobertura(CommitFile file) {
