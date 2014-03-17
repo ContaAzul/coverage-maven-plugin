@@ -4,8 +4,6 @@ import static com.contaazul.coverage.pullrequest.CoberturaUtils.addTo;
 import static com.contaazul.coverage.pullrequest.CoberturaUtils.map;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import org.eclipse.egit.github.core.CommitFile;
 import org.slf4j.Logger;
@@ -18,12 +16,10 @@ import com.contaazul.coverage.cobertura.LineCoveragerImpl;
 import com.contaazul.coverage.cobertura.entity.Clazz;
 import com.contaazul.coverage.cobertura.entity.Coverage;
 import com.contaazul.coverage.git.LinePositioner;
-import com.contaazul.coverage.git.OneToOneLinePositioner;
 import com.contaazul.coverage.git.PatchLinePositioner;
 import com.contaazul.coverage.github.GithubService;
 import com.contaazul.coverage.github.PullRequestComment;
-import com.contaazul.coverage.github.PullRequestCommitComment;
-import com.contaazul.coverage.github.PullRequestSHARetriever;
+import com.contaazul.coverage.pullrequest.analyser.FileAnalyser;
 import com.google.common.collect.Lists;
 
 // XXX this class has too much responsibility.
@@ -32,14 +28,14 @@ public abstract class AbstractPullRequestValidator implements PullRequestValidat
 	private static final Logger logger = LoggerFactory.getLogger( PullRequestValidator.class );
 	private final int minCoverage;
 	private final GithubService gh;
-	private ClazzMapper mapper;
-	private final PullRequestSHARetriever shas;
+	private final ClazzMapper mapper;
+	private final ChunkBlammer blammer;
 
 	public AbstractPullRequestValidator(GithubService gh, Coverage coverage, String srcFolder, int minCoverage) {
 		this.gh = gh;
 		this.minCoverage = minCoverage;
 		this.mapper = new ClazzMapperImpl( coverage, srcFolder );
-		this.shas = new PullRequestSHARetriever( gh );
+		this.blammer = new ChunkBlammer( gh, minCoverage );
 	}
 
 	/*
@@ -65,36 +61,8 @@ public abstract class AbstractPullRequestValidator implements PullRequestValidat
 		if (positioner == null || coverager == null)
 			return nullCobertura();
 
-		return analyseFile( file, positioner, coverager );
-	}
-
-	private Cobertura analyseFile(CommitFile file, final LinePositioner positioner, final LineCoverager coverager) {
-		final List<Cobertura> fileCoverage = Lists.newArrayList();
-		for (Map<Integer, Integer> chunk : positioner.getChunks())
-			addTo( fileCoverage, analyseChunk( chunk, file, coverager, positioner ) );
-		return map( fileCoverage );
-	}
-
-	private Cobertura analyseChunk(Map<Integer, Integer> chunk, CommitFile file, LineCoverager coverager,
-			LinePositioner positioner) {
-		logger.debug( "Analysing chunk " + chunk );
-		Cobertura chunkCoverage = getChunkCoverage( chunk, coverager );
-		if (chunkCoverage.isLowerThan( minCoverage ))
-			blameChunk( file, chunkCoverage.getCoverage(), positioner.toPosition( chunkCoverage.getLastLine() ) );
-		return chunkCoverage;
-	}
-
-	private Cobertura getChunkCoverage(Map<Integer, Integer> chunk, LineCoverager coverager) {
-		final Cobertura chunkCoverage = new CoberturaImpl();
-		for (Entry<Integer, Integer> line : chunk.entrySet())
-			analyseLine( coverager, chunkCoverage, line.getKey() );
-		return chunkCoverage;
-	}
-
-	private void analyseLine(LineCoverager coverager, Cobertura chunkCoverage, int line) {
-		final Integer lineCoverage = coverager.getLineCoverage( line );
-		if (lineCoverage != null)
-			chunkCoverage.incrementCoverage( line, lineCoverage );
+		return new FileAnalyser( blammer, coverager, positioner )
+				.analyse( file, positioner, coverager );
 	}
 
 	private void checkTotalCoverage(Cobertura cobertura) {
@@ -117,16 +85,6 @@ public abstract class AbstractPullRequestValidator implements PullRequestValidat
 		return new NullCobertura();
 	}
 
-	private void blameChunk(CommitFile cf, double coverage, int position) {
-		logger.debug( "Blamming chunk on " + cf.getFilename() + " for the coverage " + coverage + " in position "
-				+ position );
-		String sha = shas.get( cf );
-		String filename = cf.getFilename();
-		PullRequestCommitComment comment = new PullRequestCommitComment( coverage, minCoverage, sha,
-				filename, position );
-		gh.createComment( comment );
-	}
-
 	private LineCoverager createLineCoverager(CommitFile commitFile) {
 		logger.debug( "filename: " + commitFile.getFilename() );
 		Clazz clazz = mapper.getClazz( commitFile.getFilename() );
@@ -136,9 +94,6 @@ public abstract class AbstractPullRequestValidator implements PullRequestValidat
 	}
 
 	private LinePositioner createLinePositioner(CommitFile cf) {
-		if ("added".equals( cf.getStatus() ))
-			return new OneToOneLinePositioner();
-		else
-			return new PatchLinePositioner( cf.getPatch() );
+		return new PatchLinePositioner( cf.getPatch() );
 	}
 }
