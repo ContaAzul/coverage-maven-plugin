@@ -41,7 +41,7 @@ public class LineAnalyserTest {
 	public void testLineCoverage() throws Exception {
 		final LineCoverager coverager = mock( LineCoverager.class );
 		final Cobertura cobertura = spy( new CoberturaImpl() );
-		when( coverager.getLineCoverage( anyInt() ) ).thenReturn( 90 );
+		when( coverager.getLineCoverage( anyInt() ) ).thenReturn( 90.0 );
 		analyser.analyse( 1, coverager, cobertura );
 		verify( cobertura, times( 1 ) ).incrementCoverage( anyDouble() );
 		verify( cobertura, times( 1 ) ).incrementCoverage( anyInt(), anyDouble() );
