@@ -17,7 +17,7 @@ import com.contaazul.coverage.cobertura.LineCoverager;
 import com.contaazul.coverage.pullrequest.Cobertura;
 import com.contaazul.coverage.pullrequest.CoberturaImpl;
 
-public class LineAnalyserTEst {
+public class LineAnalyserTest {
 
 	private LineAnalyser analyser;
 
