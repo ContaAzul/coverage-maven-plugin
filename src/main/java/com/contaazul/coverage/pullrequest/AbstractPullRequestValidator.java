@@ -101,9 +101,6 @@ public abstract class AbstractPullRequestValidator implements PullRequestValidat
 	}
 
 	private LinePositioner createLinePositioner(CommitFile cf) {
-		if ("added".equals( cf.getStatus() ))
-			return new OneToOneLinePositioner();
-		else
-			return new PatchLinePositioner( cf.getPatch() );
+		return new PatchLinePositioner( cf.getPatch() );
 	}
 }
