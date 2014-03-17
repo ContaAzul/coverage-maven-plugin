@@ -1,5 +1,7 @@
 package com.contaazul.coverage.pullrequest;
 
+import static com.contaazul.coverage.pullrequest.CoberturaMapper.map;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -97,13 +99,6 @@ public abstract class AbstractPullRequestValidator implements PullRequestValidat
 		final Integer lineCoverage = coverager.getLineCoverage( line );
 		if (lineCoverage != null)
 			chunkCoverage.incrementCoverage( line, lineCoverage );
-	}
-
-	private Cobertura map(List<Cobertura> coverages) {
-		Cobertura coverage = new CoberturaImpl();
-		for (Cobertura cov : coverages)
-			coverage.incrementCoverage( cov.getCoverage() );
-		return coverage;
 	}
 
 	private void checkTotalCoverage(Cobertura cobertura) {
