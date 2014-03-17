@@ -4,8 +4,6 @@ import static com.contaazul.coverage.pullrequest.CoberturaUtils.addTo;
 import static com.contaazul.coverage.pullrequest.CoberturaUtils.map;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import org.eclipse.egit.github.core.CommitFile;
 import org.slf4j.Logger;
@@ -18,15 +16,10 @@ import com.contaazul.coverage.cobertura.LineCoveragerImpl;
 import com.contaazul.coverage.cobertura.entity.Clazz;
 import com.contaazul.coverage.cobertura.entity.Coverage;
 import com.contaazul.coverage.git.LinePositioner;
-import com.contaazul.coverage.git.OneToOneLinePositioner;
 import com.contaazul.coverage.git.PatchLinePositioner;
 import com.contaazul.coverage.github.GithubService;
 import com.contaazul.coverage.github.PullRequestComment;
-import com.contaazul.coverage.github.PullRequestCommitComment;
-import com.contaazul.coverage.github.PullRequestSHARetriever;
-import com.contaazul.coverage.pullrequest.analyser.ChunkAnalyser;
 import com.contaazul.coverage.pullrequest.analyser.FileAnalyser;
-import com.contaazul.coverage.pullrequest.analyser.LineAnalyser;
 import com.google.common.collect.Lists;
 
 // XXX this class has too much responsibility.
