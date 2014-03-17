@@ -3,6 +3,7 @@ package com.contaazul.coverage.cobertura;
 import com.contaazul.coverage.cobertura.entity.Clazz;
 import com.contaazul.coverage.cobertura.entity.Coverage;
 import com.contaazul.coverage.cobertura.entity.Package;
+import com.contaazul.coverage.maven.CoverageMavenProject;
 
 public class ClazzMapperImpl implements ClazzMapper {
 	private final Coverage coverage;
@@ -11,6 +12,10 @@ public class ClazzMapperImpl implements ClazzMapper {
 	public ClazzMapperImpl(Coverage coverage, String srcFolder) {
 		this.coverage = coverage;
 		this.srcFolder = srcFolder;
+	}
+
+	public ClazzMapperImpl(CoverageMavenProject coveraged) {
+		this( coveraged.getCoverage(), coveraged.getSrcFolder() );
 	}
 
 	/*

@@ -6,6 +6,8 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.project.MavenProject;
 
 import com.contaazul.coverage.github.GithubRepo;
+import com.contaazul.coverage.maven.CoverageMavenProject;
+import com.contaazul.coverage.pullrequest.PullRequestValidator;
 import com.contaazul.coverage.pullrequest.PullRequestValidatorBuilder;
 
 /**
@@ -76,15 +78,15 @@ public class CoveragePullRequestMojo extends AbstractMojo {
 
 	@Override
 	public void execute() {
+		final PullRequestValidator pr = new PullRequestValidatorBuilder()
+				.oauth2( oauth2 )
+				.pullRequest( pullRequestId )
+				.repository( new GithubRepo( repositoryName, repositoryOwner ) )
+				.minCoverage( minimumCoverage )
+				.breakOnLowCov( breakOnLowCov )
+				.build();
 		for (MavenProject proj : reactorProjects)
-			new PullRequestValidatorBuilder()
-					.oauth2( oauth2 )
-					.pullRequest( pullRequestId )
-					.repository( new GithubRepo( repositoryName, repositoryOwner ) )
-					.minCoverage( minimumCoverage )
-					.project( proj )
-					.breakOnLowCov( breakOnLowCov )
-					.build()
-					.validate();
+			pr.validate( new CoverageMavenProject( proj ) );
+
 	}
 }

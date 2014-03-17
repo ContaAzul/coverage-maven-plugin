@@ -1,5 +1,6 @@
 package com.contaazul.coverage;
 
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -17,6 +18,7 @@ import com.contaazul.coverage.cobertura.entity.Coverage;
 import com.contaazul.coverage.cobertura.entity.Line;
 import com.contaazul.coverage.cobertura.entity.Package;
 import com.contaazul.coverage.github.GithubService;
+import com.contaazul.coverage.maven.CoverageMavenProject;
 import com.contaazul.coverage.pullrequest.BuildBreakerPullRequestValidator;
 import com.contaazul.coverage.pullrequest.PullRequestValidator;
 import com.contaazul.coverage.pullrequest.UndercoveredException;
@@ -52,8 +54,11 @@ public class PullRequestValidatorTest {
 	@Test(expected = UndercoveredException.class)
 	public void testValidateInvalid() throws Exception {
 		when( clazz.getLines() ).thenReturn( Arrays.asList( new Line( 10, 20, false, null, null ) ) );
-		validator = new BuildBreakerPullRequestValidator( gh, cov, "src/main/java", 110 );
-		validator.validate();
+		validator = new BuildBreakerPullRequestValidator( gh, 110 );
+		CoverageMavenProject project = mock( CoverageMavenProject.class );
+		when( project.getCoverage() ).thenReturn( cov );
+		when( project.getSrcFolder() ).thenReturn( "src/main/java" );
+		validator.validate( project );
 	}
 
 	@Test
@@ -66,7 +71,10 @@ public class PullRequestValidatorTest {
 		f.setPatch( patch );
 		f.setFilename( "src/main/java/com/contaazul/coverage/pullrequest/PullRequestValidatorImpl.java" );
 		when( gh.getPullRequestCommitFiles() ).thenReturn( Arrays.asList( f ) );
-		validator = new BuildBreakerPullRequestValidator( gh, cov, "src/main/java", 0 );
-		validator.validate();
+		validator = new BuildBreakerPullRequestValidator( gh, 0 );
+		CoverageMavenProject project = mock( CoverageMavenProject.class );
+		when( project.getCoverage() ).thenReturn( cov );
+		when( project.getSrcFolder() ).thenReturn( "src/main/java" );
+		validator.validate( project );
 	}
 }

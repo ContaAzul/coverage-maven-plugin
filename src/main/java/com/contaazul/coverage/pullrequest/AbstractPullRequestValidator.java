@@ -14,11 +14,11 @@ import com.contaazul.coverage.cobertura.ClazzMapperImpl;
 import com.contaazul.coverage.cobertura.LineCoverager;
 import com.contaazul.coverage.cobertura.LineCoveragerImpl;
 import com.contaazul.coverage.cobertura.entity.Clazz;
-import com.contaazul.coverage.cobertura.entity.Coverage;
 import com.contaazul.coverage.git.LinePositioner;
 import com.contaazul.coverage.git.PatchLinePositioner;
 import com.contaazul.coverage.github.GithubService;
 import com.contaazul.coverage.github.PullRequestComment;
+import com.contaazul.coverage.maven.CoverageMavenProject;
 import com.contaazul.coverage.pullrequest.analyser.FileAnalyser;
 import com.google.common.collect.Lists;
 
@@ -28,13 +28,11 @@ public abstract class AbstractPullRequestValidator implements PullRequestValidat
 	private static final Logger logger = LoggerFactory.getLogger( PullRequestValidator.class );
 	private final int minCoverage;
 	private final GithubService gh;
-	private final ClazzMapper mapper;
 	private final ChunkBlammer blammer;
 
-	public AbstractPullRequestValidator(GithubService gh, Coverage coverage, String srcFolder, int minCoverage) {
+	public AbstractPullRequestValidator(GithubService gh, int minCoverage) {
 		this.gh = gh;
 		this.minCoverage = minCoverage;
-		this.mapper = new ClazzMapperImpl( coverage, srcFolder );
 		this.blammer = new ChunkBlammer( gh, minCoverage );
 	}
 
@@ -44,20 +42,21 @@ public abstract class AbstractPullRequestValidator implements PullRequestValidat
 	 * @see com.contaazul.coverage.IPullRequestValidator#validate()
 	 */
 	@Override
-	public void validate() {
+	public void validate(CoverageMavenProject project) {
+		final ClazzMapper mapper = new ClazzMapperImpl( project );
 		final List<Cobertura> coberturas = Lists.newArrayList();
 		for (CommitFile file : gh.getPullRequestCommitFiles())
-			addTo( coberturas, getCobertura( file ) );
+			addTo( coberturas, getCobertura( mapper, file ) );
 		checkTotalCoverage( map( coberturas ) );
 	}
 
-	private Cobertura getCobertura(CommitFile file) {
+	private Cobertura getCobertura(ClazzMapper mapper, CommitFile file) {
 		logger.debug( "File: " + file.getFilename() );
 		if (file.getPatch() == null)
 			return nullCobertura();
 
 		final LinePositioner positioner = createLinePositioner( file );
-		final LineCoverager coverager = createLineCoverager( file );
+		final LineCoverager coverager = createLineCoverager( mapper, file );
 		if (positioner == null || coverager == null)
 			return nullCobertura();
 
@@ -85,7 +84,7 @@ public abstract class AbstractPullRequestValidator implements PullRequestValidat
 		return new NullCobertura();
 	}
 
-	private LineCoverager createLineCoverager(CommitFile commitFile) {
+	private LineCoverager createLineCoverager(ClazzMapper mapper, CommitFile commitFile) {
 		logger.debug( "filename: " + commitFile.getFilename() );
 		Clazz clazz = mapper.getClazz( commitFile.getFilename() );
 		if (clazz == null)
