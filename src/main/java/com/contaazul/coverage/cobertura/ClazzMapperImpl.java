@@ -38,7 +38,7 @@ public class ClazzMapperImpl implements ClazzMapper {
 	}
 
 	private String getPackageName(String clazzName) {
-		return clazzName.substring( 0, clazzName.lastIndexOf( "." ) );
+		return clazzName.substring( 0, clazzName.lastIndexOf( '.' ) );
 	}
 
 	private String getClazzName(String filename) {
