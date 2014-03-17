@@ -72,19 +72,19 @@ public class CoveragePullRequestMojo extends AbstractMojo {
 	 * @parameter property="reactorProjects"
 	 * @readonly
 	 */
-	@SuppressWarnings("unused")
 	private List<MavenProject> reactorProjects;
 
 	@Override
 	public void execute() {
-		new PullRequestValidatorBuilder()
-				.oauth2( oauth2 )
-				.pullRequest( pullRequestId )
-				.repository( new GithubRepo( repositoryName, repositoryOwner ) )
-				.minCoverage( minimumCoverage )
-				.project( project )
-				.breakOnLowCov( breakOnLowCov )
-				.build()
-				.validate();
+		for (MavenProject proj : reactorProjects)
+			new PullRequestValidatorBuilder()
+					.oauth2( oauth2 )
+					.pullRequest( pullRequestId )
+					.repository( new GithubRepo( repositoryName, repositoryOwner ) )
+					.minCoverage( minimumCoverage )
+					.project( proj )
+					.breakOnLowCov( breakOnLowCov )
+					.build()
+					.validate();
 	}
 }
