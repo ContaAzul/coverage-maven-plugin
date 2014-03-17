@@ -21,9 +21,10 @@ public class CoverageMavenProject {
 	}
 
 	public Coverage getCoverage() {
-		final Parser parser = new Parser();
-		final String coverageXml = getBuildDirectory() + COVERAGE_XML;
-		return parser.parse( new File( coverageXml ) );
+		final File coverage = new File( getBuildDirectory() + COVERAGE_XML );
+		if (!coverage.exists())
+			return new Coverage();
+		return new Parser().parse( coverage );
 	}
 
 	public String getSrcFolder() {
@@ -31,11 +32,14 @@ public class CoverageMavenProject {
 		final String srcFolder = project.getBuild().getSourceDirectory();
 		final String srcRelativeFolder = srcFolder.substring( projectFolder
 				.length() + 1 );
-		logger.debug( "Relative SRC folder: " + srcRelativeFolder );
+		logger.debug( "Project Folder: " + projectFolder +
+				"\nSource Folder: " + srcFolder +
+				"\nRelative SRC folder: " + srcRelativeFolder );
 		return srcRelativeFolder;
 	}
 
 	public String getBuildDirectory() {
+		logger.debug( "Build dir: " + project.getBuild().getDirectory() );
 		return project.getBuild().getDirectory();
 	}
 }
