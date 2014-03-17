@@ -21,11 +21,10 @@ public class CoverageMavenProject {
 	}
 
 	public Coverage getCoverage() {
-		final Parser parser = new Parser();
 		final File coverage = new File( getBuildDirectory() + COVERAGE_XML );
 		if (!coverage.exists())
 			return new Coverage();
-		return parser.parse( coverage );
+		return new Parser().parse( coverage );
 	}
 
 	public String getSrcFolder() {
