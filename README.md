@@ -40,7 +40,22 @@ mvn clean install cobertura:cobertura \
   -DminCoverage=90 # the minimum acceptable coverage
 ```
 
-You can get a OAUTH2 key [here](https://github.com/settings/tokens/new)
+You can get a OAUTH2 key [here](https://github.com/settings/tokens/new).
+
+## Why?
+
+We used to manually look at our code coverage statuses, and see if our
+recently added lines are with enough coverage. But this is boring, and
+we are developers, and developers automate things, and so we did.
+
+Pull Requests are a part of our culture, and we want good code coverage
+to be as well. We already have a [Sonar Plugin][sonar] that will report
+code with bugs and other issues, and now we also have Code Coverage.
+
+We configured this plugin to run within our CI Server, so, everything is
+automated, we just open a pull request and the CI do the rest.
+
+[sonar]:https://github.com/velo/sonar-pull-request-integration
 
 ## How it works
 
