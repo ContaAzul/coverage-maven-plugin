@@ -1,6 +1,7 @@
 package com.contaazul.coverage;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -17,7 +18,6 @@ import com.contaazul.coverage.cobertura.CoverageException;
 import com.contaazul.coverage.github.GithubRepo;
 import com.contaazul.coverage.pullrequest.PullRequestValidator;
 import com.contaazul.coverage.pullrequest.PullRequestValidatorBuilder;
-import com.google.common.io.Files;
 
 public class PullRequestValidatorBuilderTest {
 
@@ -32,10 +32,7 @@ public class PullRequestValidatorBuilderTest {
 	public void setup() throws IOException {
 		initMocks( this );
 		repo = new GithubRepo( "caarlos0", "coverage-maven-plugin" );
-		File folder = new File( "target/tmp/target/site/cobertura" );
-		folder.mkdirs();
-		Files.copy( new File( "src/test/resources/coverage.xml" ), new File( folder.getAbsolutePath()
-				+ "/coverage.xml" ) );
+		TestUtil.createTmpData();
 
 		when( build.getDirectory() ).thenReturn( new File( "target/tmp/target/" ).getAbsolutePath() );
 		when( build.getSourceDirectory() ).thenReturn( new File( "target/tmp/src" ).getAbsolutePath() );
