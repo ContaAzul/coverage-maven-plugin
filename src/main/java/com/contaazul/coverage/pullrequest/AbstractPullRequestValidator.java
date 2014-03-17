@@ -1,6 +1,7 @@
 package com.contaazul.coverage.pullrequest;
 
-import static com.contaazul.coverage.pullrequest.CoberturaMapper.map;
+import static com.contaazul.coverage.pullrequest.CoberturaUtils.addTo;
+import static com.contaazul.coverage.pullrequest.CoberturaUtils.map;
 
 import java.util.List;
 import java.util.Map;
@@ -50,13 +51,8 @@ public abstract class AbstractPullRequestValidator implements PullRequestValidat
 	public void validate() {
 		final List<Cobertura> coberturas = Lists.newArrayList();
 		for (CommitFile file : gh.getPullRequestCommitFiles())
-			add( coberturas, getCobertura( file ) );
+			addTo( coberturas, getCobertura( file ) );
 		checkTotalCoverage( map( coberturas ) );
-	}
-
-	private void add(final List<Cobertura> coberturas, Cobertura cobertura) {
-		if (cobertura.isCounted())
-			coberturas.add( cobertura );
 	}
 
 	private Cobertura getCobertura(CommitFile file) {
@@ -75,7 +71,7 @@ public abstract class AbstractPullRequestValidator implements PullRequestValidat
 	private Cobertura analyseFile(CommitFile file, final LinePositioner positioner, final LineCoverager coverager) {
 		final List<Cobertura> fileCoverage = Lists.newArrayList();
 		for (Map<Integer, Integer> chunk : positioner.getChunks())
-			add( fileCoverage, analyseChunk( chunk, file, coverager, positioner ) );
+			addTo( fileCoverage, analyseChunk( chunk, file, coverager, positioner ) );
 		return map( fileCoverage );
 	}
 
