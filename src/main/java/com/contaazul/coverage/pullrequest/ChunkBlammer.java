@@ -1,7 +1,6 @@
 package com.contaazul.coverage.pullrequest;
 
 import org.eclipse.egit.github.core.CommitFile;
-import org.eclipse.egit.github.core.ShaResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

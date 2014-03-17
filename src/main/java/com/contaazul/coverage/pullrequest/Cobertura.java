@@ -10,7 +10,7 @@ public interface Cobertura {
 
 	double getCoverage();
 
-	void incrementCoverage(int line, int coverage);
+	void incrementCoverage(int line, double coverage);
 
 	int getLastLine();
 
