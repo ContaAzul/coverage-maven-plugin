@@ -45,13 +45,17 @@ public class PatchLinePositioner implements LinePositioner {
 		final List<Map<Integer, Integer>> chunks = newArrayList();
 		int lastLine = -1;
 		for (final Entry<Integer, Integer> line : getLinesAdded().entrySet()) {
-			if (line.getKey() == lastLine + 1)
-				chunks.get( chunks.size() - 1 ).put( line.getKey(), line.getValue() );
-			else
-				chunks.add( newChunk( line ) );
+			addLine( chunks, lastLine, line );
 			lastLine = line.getKey();
 		}
 		return chunks;
+	}
+
+	private void addLine(final List<Map<Integer, Integer>> chunks, int lastLine, final Entry<Integer, Integer> line) {
+		if (line.getKey() == lastLine + 1)
+			chunks.get( chunks.size() - 1 ).put( line.getKey(), line.getValue() );
+		else
+			chunks.add( newChunk( line ) );
 	}
 
 	private Map<Integer, Integer> newChunk(Entry<Integer, Integer> line) {
