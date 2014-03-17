@@ -13,7 +13,7 @@ public class CoberturaImpl implements Cobertura {
 	}
 
 	@Override
-	public void incrementCoverage(int line, int coverage) {
+	public void incrementCoverage(int line, double coverage) {
 		this.lastLine = line;
 		incrementCoverage( coverage );
 	}
