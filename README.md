@@ -59,12 +59,15 @@ automated, we just open a pull request and the CI do the rest.
 
 ## How it works
 
-- It's based in Cobertura Maven plugin, but, you this will probably be changed
-at some time;
+- It's based in Cobertura Maven plugin, but this will probably be changed
+in the future;
 - We use the egit.github library to get and put info into Github using OAUTH2;
 - The plugin will map the lines added in your pull request with the results
 provided by Cobertura, then calc each chunk coverage, then each file coverage,
 and then the overral PR coverage.
 
+### TODO's
+
+Please take a look at [this issue](https://github.com/caarlos0/coverage-maven-plugin/issues/4)
 
 
