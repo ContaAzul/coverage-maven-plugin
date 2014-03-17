@@ -52,10 +52,10 @@ public class ChunkAnalyserTest {
 		chunk.put( 2, 80 );
 		chunk.put( 3, 100 );
 		chunk.put( 4, 56 );
-		doReturn( 10 ).when( coverager ).getLineCoverage( eq( 1 ) );
-		doReturn( 80 ).when( coverager ).getLineCoverage( eq( 2 ) );
-		doReturn( 100 ).when( coverager ).getLineCoverage( eq( 3 ) );
-		doReturn( 56 ).when( coverager ).getLineCoverage( eq( 4 ) );
+		doReturn( 10.0 ).when( coverager ).getLineCoverage( eq( 1 ) );
+		doReturn( 80.0 ).when( coverager ).getLineCoverage( eq( 2 ) );
+		doReturn( 100.0 ).when( coverager ).getLineCoverage( eq( 3 ) );
+		doReturn( 56.0 ).when( coverager ).getLineCoverage( eq( 4 ) );
 		Cobertura cov = analyser.analyse( chunk, cf );
 		assertEquals( 61.5, cov.getCoverage(), 0.01 );
 	}
