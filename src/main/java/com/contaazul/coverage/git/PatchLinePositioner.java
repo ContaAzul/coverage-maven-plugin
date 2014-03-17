@@ -65,7 +65,7 @@ public class PatchLinePositioner implements LinePositioner {
 	}
 
 	private Integer getLineNumber(String line) {
-		return new Integer( line.replaceAll( "@@.*\\+", "" ).replaceAll( "\\,.*", "" )
+		return Integer.valueOf( line.replaceAll( "@@.*\\+", "" ).replaceAll( "\\,.*", "" )
 				.replaceAll( "\\D", "" ) );
 	}
 }

@@ -5,7 +5,6 @@ import static org.mockito.MockitoAnnotations.initMocks;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.eclipse.egit.github.core.CommitFile;
@@ -20,7 +19,6 @@ import com.contaazul.coverage.cobertura.entity.Package;
 import com.contaazul.coverage.github.GithubService;
 import com.contaazul.coverage.pullrequest.BuildBreakerPullRequestValidator;
 import com.contaazul.coverage.pullrequest.PullRequestValidator;
-import com.contaazul.coverage.pullrequest.AbstractPullRequestValidator;
 import com.contaazul.coverage.pullrequest.UndercoveredException;
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;

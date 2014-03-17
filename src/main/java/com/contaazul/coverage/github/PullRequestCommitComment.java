@@ -8,7 +8,7 @@ public class PullRequestCommitComment {
 	private String sha;
 	private String path;
 	private int position;
-	private final String messageTemplate = "This chunk has %.2f%% of tests coverage, which is lower than %s%% minimum allowed";
+	private static final String messageTemplate = "This chunk has %.2f%% of tests coverage, which is lower than %s%% minimum allowed";
 
 	public PullRequestCommitComment(double coverage, int minCoverage, String sha, String path, int position) {
 		super();

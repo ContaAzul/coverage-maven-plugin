@@ -4,6 +4,7 @@ public class NullCobertura implements Cobertura {
 
 	@Override
 	public void incrementCoverage(double coverage) {
+		// null object pattern, bro
 	}
 
 	@Override
@@ -13,6 +14,7 @@ public class NullCobertura implements Cobertura {
 
 	@Override
 	public void incrementCoverage(int line, int coverage) {
+		// null object pattern, bro
 	}
 
 	@Override

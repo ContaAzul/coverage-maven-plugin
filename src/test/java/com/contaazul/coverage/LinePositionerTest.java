@@ -1,13 +1,14 @@
 package com.contaazul.coverage;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import com.contaazul.coverage.git.LinePositioner;
 import com.contaazul.coverage.git.OneToOneLinePositioner;
