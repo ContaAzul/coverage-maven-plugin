@@ -1,17 +1,12 @@
 package com.contaazul.coverage.pullrequest;
 
-import org.apache.maven.project.MavenProject;
-
 import com.contaazul.coverage.cobertura.CoverageException;
-import com.contaazul.coverage.cobertura.entity.Coverage;
 import com.contaazul.coverage.github.GithubRepo;
 import com.contaazul.coverage.github.GithubService;
 import com.contaazul.coverage.github.GithubServiceImpl;
-import com.contaazul.coverage.maven.CoverageMavenProject;
 
 public class PullRequestValidatorBuilder {
 	private int minCoverage = 95;
-	private CoverageMavenProject project;
 	private String oauth2;
 	private int pullRequestId = -1;
 	private GithubRepo repo;
@@ -22,11 +17,6 @@ public class PullRequestValidatorBuilder {
 
 	public PullRequestValidatorBuilder minCoverage(int minCoverage) {
 		this.minCoverage = minCoverage;
-		return this;
-	}
-
-	public PullRequestValidatorBuilder project(MavenProject project) {
-		this.project = new CoverageMavenProject( project );
 		return this;
 	}
 
@@ -53,22 +43,18 @@ public class PullRequestValidatorBuilder {
 	public PullRequestValidator build() {
 		validate();
 		final GithubService gh = new GithubServiceImpl( repo, oauth2, pullRequestId );
-		final String src = project.getSrcFolder();
-		final Coverage coverage = project.getCoverage();
-		return create( gh, src, coverage );
+		return create( gh );
 	}
 
-	private PullRequestValidator create(final GithubService gh, final String src, final Coverage coverage) {
+	private PullRequestValidator create(final GithubService gh) {
 		if (breakOnLowCov)
-			return new BuildBreakerPullRequestValidator( gh, coverage, src, minCoverage );
+			return new BuildBreakerPullRequestValidator( gh, minCoverage );
 		else
-			return new NonBuildBreakerPullRequestValidator( gh, coverage, src, minCoverage );
+			return new NonBuildBreakerPullRequestValidator( gh, minCoverage );
 	}
 
 	private void validate() {
 		if (repo == null || oauth2 == null || pullRequestId < 1)
 			throw new CoverageException( "Can't build GithubService." );
-		if (project == null)
-			throw new CoverageException( "Can't get Project data." );
 	}
 }
