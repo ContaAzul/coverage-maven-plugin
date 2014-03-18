@@ -83,7 +83,7 @@ public class CoveragePullRequestMojo extends AbstractMojo {
 
 	@Override
 	public void execute() {
-		if (project.isExecutionRoot())
+		if (project.isExecutionRoot() && reactorProjects.isEmpty())
 			return;
 		logger.info( "Executing on " + project );
 		final PullRequestValidator pr = new PullRequestValidatorBuilder()

@@ -33,14 +33,20 @@ public class CoverageMavenProject {
 	}
 
 	public String getSrcFolder() {
-		final String projectFolder = project.getBasedir().getAbsolutePath();
+		final String projectFolder = getProjectFolder();
 		final String srcFolder = project.getBuild().getSourceDirectory();
-		final String srcRelativeFolder = getArtifactId() + "/" + srcFolder.substring( projectFolder
+		final String srcRelativeFolder = srcFolder.substring( projectFolder
 				.length() + 1 );
 		logger.debug( "Project Folder: " + projectFolder +
 				"\nSource Folder: " + srcFolder +
 				"\nRelative SRC folder: " + srcRelativeFolder );
 		return srcRelativeFolder;
+	}
+
+	private String getProjectFolder() {
+		if (project.isExecutionRoot())
+			return project.getBasedir().getAbsolutePath();
+		return project.getBasedir().getParent();
 	}
 
 	public String getBuildDirectory() {
