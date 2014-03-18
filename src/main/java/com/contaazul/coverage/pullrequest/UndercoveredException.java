@@ -1,10 +1,13 @@
 package com.contaazul.coverage.pullrequest;
 
+import static com.contaazul.coverage.github.Messages.BUILD;
+
+import com.contaazul.coverage.maven.CoverageMavenProject;
+
 public class UndercoveredException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
-	public static final String MSG = "The new lines added are with only %.2f%% total test coverage, which is lower than %d%% minimum allowed.";
 
-	public UndercoveredException(Cobertura cobertura, int minCoverage) {
-		super( String.format( MSG, cobertura.getCoverage(), minCoverage ) );
+	public UndercoveredException(CoverageMavenProject project, Cobertura cobertura, int minCoverage) {
+		super( String.format( BUILD, project, cobertura.getCoverage(), minCoverage ) );
 	}
 }

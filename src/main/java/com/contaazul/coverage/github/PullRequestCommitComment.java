@@ -1,5 +1,7 @@
 package com.contaazul.coverage.github;
 
+import static com.contaazul.coverage.github.Messages.COMMIT;
+
 import org.eclipse.egit.github.core.CommitComment;
 
 public class PullRequestCommitComment {
@@ -8,7 +10,6 @@ public class PullRequestCommitComment {
 	private String sha;
 	private String path;
 	private int position;
-	private static final String messageTemplate = "This chunk has %.2f%% of tests coverage, which is lower than %s%% minimum allowed";
 
 	public PullRequestCommitComment(double coverage, int minCoverage, String sha, String path, int position) {
 		super();
@@ -39,6 +40,6 @@ public class PullRequestCommitComment {
 	}
 
 	private String getMessageBody() {
-		return String.format( messageTemplate, coverage, minCoverage );
+		return String.format( COMMIT, coverage, minCoverage );
 	}
 }

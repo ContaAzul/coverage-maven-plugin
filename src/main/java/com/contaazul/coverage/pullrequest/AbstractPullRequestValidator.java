@@ -1,5 +1,7 @@
 package com.contaazul.coverage.pullrequest;
 
+import static com.contaazul.coverage.github.Messages.BUILD;
+import static com.contaazul.coverage.github.Messages.PULL_REQUEST;
 import static com.contaazul.coverage.pullrequest.CoberturaUtils.addTo;
 import static com.contaazul.coverage.pullrequest.CoberturaUtils.map;
 
@@ -17,14 +19,12 @@ import com.contaazul.coverage.cobertura.entity.Clazz;
 import com.contaazul.coverage.git.LinePositioner;
 import com.contaazul.coverage.git.PatchLinePositioner;
 import com.contaazul.coverage.github.GithubService;
-import com.contaazul.coverage.github.PullRequestComment;
 import com.contaazul.coverage.maven.CoverageMavenProject;
 import com.contaazul.coverage.pullrequest.analyser.FileAnalyser;
 import com.google.common.collect.Lists;
 
 // XXX this class has too much responsibility.
 public abstract class AbstractPullRequestValidator implements PullRequestValidator {
-	private static final String MESSAGE = "The new lines added are with %.2f%% of %d%% minimum allowed code coverage.";
 	private static final Logger logger = LoggerFactory.getLogger( PullRequestValidator.class );
 	private final int minCoverage;
 	private final GithubService gh;
@@ -47,7 +47,7 @@ public abstract class AbstractPullRequestValidator implements PullRequestValidat
 		final List<Cobertura> coberturas = Lists.newArrayList();
 		for (CommitFile file : gh.getPullRequestCommitFiles())
 			addTo( coberturas, getCobertura( mapper, file ) );
-		checkTotalCoverage( map( coberturas ) );
+		checkTotalCoverage( map( coberturas ), project );
 	}
 
 	private Cobertura getCobertura(ClazzMapper mapper, CommitFile file) {
@@ -64,17 +64,21 @@ public abstract class AbstractPullRequestValidator implements PullRequestValidat
 				.analyse( file, positioner, coverager );
 	}
 
-	private void checkTotalCoverage(Cobertura cobertura) {
-		logger.info( String.format( MESSAGE, cobertura.getCoverage(), minCoverage ) );
+	private void checkTotalCoverage(Cobertura cobertura, CoverageMavenProject project) {
+		logger.info( String.format( BUILD, project.getArtifactId(), cobertura.getCoverage(), minCoverage ) );
 		if (cobertura.isLowerThan( minCoverage ))
-			blameLowCoverage( cobertura );
+			blameLowCoverage( cobertura, project );
 	}
 
-	private void blameLowCoverage(Cobertura cobertura) {
-		gh.createComment( PullRequestComment.MSG + "\n\n"
-				+ String.format( UndercoveredException.MSG, cobertura.getCoverage(), minCoverage ) );
+	private void blameLowCoverage(Cobertura cobertura, CoverageMavenProject project) {
+		gh.createComment( format( cobertura, project ) );
 		if (breakOnLowCoverage())
-			throw new UndercoveredException( cobertura, minCoverage );
+			throw new UndercoveredException( project, cobertura, minCoverage );
+	}
+
+	private String format(Cobertura cobertura, CoverageMavenProject project) {
+		return String.format( PULL_REQUEST, project.getArtifactId(), cobertura.getCoverage(),
+				minCoverage );
 	}
 
 	protected abstract boolean breakOnLowCoverage();

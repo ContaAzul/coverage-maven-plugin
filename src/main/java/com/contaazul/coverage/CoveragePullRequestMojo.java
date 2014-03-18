@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.project.MavenProject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.contaazul.coverage.github.GithubRepo;
 import com.contaazul.coverage.maven.CoverageMavenProject;
@@ -13,10 +15,13 @@ import com.contaazul.coverage.pullrequest.PullRequestValidatorBuilder;
 /**
  * 
  * @goal publish
- * @author carlos
+ * @author carlos.becker
  * 
  */
 public class CoveragePullRequestMojo extends AbstractMojo {
+
+	private static final Logger logger = LoggerFactory.getLogger( CoveragePullRequestMojo.class );
+
 	/**
 	 * Set OAuth2 token
 	 * 
@@ -78,6 +83,9 @@ public class CoveragePullRequestMojo extends AbstractMojo {
 
 	@Override
 	public void execute() {
+		if (project.isExecutionRoot())
+			return;
+		logger.info( "Executing on " + project );
 		final PullRequestValidator pr = new PullRequestValidatorBuilder()
 				.oauth2( oauth2 )
 				.pullRequest( pullRequestId )
@@ -85,8 +93,7 @@ public class CoveragePullRequestMojo extends AbstractMojo {
 				.minCoverage( minimumCoverage )
 				.breakOnLowCov( breakOnLowCov )
 				.build();
-		for (MavenProject proj : reactorProjects)
-			pr.validate( new CoverageMavenProject( proj ) );
+		pr.validate( new CoverageMavenProject( project ) );
 
 	}
 }
