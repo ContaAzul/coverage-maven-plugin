@@ -2,8 +2,10 @@ package com.contaazul.coverage.cobertura;
 
 import java.io.File;
 
+import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,11 +22,16 @@ public class Parser {
 
 	public Coverage parse(File file) {
 		try {
-			logger.debug( String.format( "Parsing %s...", file.getAbsolutePath() ) );
-			return (Coverage) jax.createUnmarshaller().unmarshal( file );
+			logger.debug(String.format("Parsing %s...", file.getAbsolutePath()));
+			return (Coverage) createUnmarshaller().unmarshal( file );
 		} catch (Exception e) {
 			throw new CoberturaException( "Cannot parse coverage.xml", e );
 		}
+	}
+
+	private Unmarshaller createUnmarshaller() throws JAXBException {
+		System.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, "all");
+		return jax.createUnmarshaller();
 	}
 
 	private JAXBContext build() {

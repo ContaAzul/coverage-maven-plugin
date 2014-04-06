@@ -8,13 +8,13 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import java.io.File;
 import java.io.IOException;
 
+import com.contaazul.coverage.TestResources;
 import org.apache.maven.model.Build;
 import org.apache.maven.project.MavenProject;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
-import com.contaazul.coverage.TestUtil;
 import com.contaazul.coverage.cobertura.entity.Coverage;
 
 public class CoverageMavenProjectTest {
@@ -27,7 +27,7 @@ public class CoverageMavenProjectTest {
 	@Before
 	public void init() throws IOException {
 		initMocks( this );
-		TestUtil.createTmpData();
+		TestResources.setup();
 	}
 
 	@Test

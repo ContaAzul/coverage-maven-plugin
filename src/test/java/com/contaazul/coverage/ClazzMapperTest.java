@@ -1,26 +1,27 @@
 package com.contaazul.coverage;
 
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
-import java.io.File;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import com.contaazul.coverage.cobertura.ClazzMapper;
 import com.contaazul.coverage.cobertura.ClazzMapperImpl;
 import com.contaazul.coverage.cobertura.Parser;
 import com.contaazul.coverage.cobertura.entity.Clazz;
 import com.contaazul.coverage.cobertura.entity.Coverage;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.io.File;
+import java.io.IOException;
+
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class ClazzMapperTest {
 	private Coverage coverage;
 	private ClazzMapper mapper;
 
 	@Before
-	public void init() {
-		coverage = new Parser().parse( new File( "src/test/resources/coverage.xml" ) );
+	public void init() throws IOException {
+		TestResources.setup();
+		coverage = new Parser().parse( new File( TestResources.COVERAGE_XML_FILE ) );
 		mapper = new ClazzMapperImpl( coverage, "src/main/java" );
 	}
 
