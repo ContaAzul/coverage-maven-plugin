@@ -16,14 +16,6 @@ public class GithubRepo {
 		this.owner = owner;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public String getOwner() {
-		return owner;
-	}
-
 	public Repository connect(RepositoryService service) {
 		try {
 			if (repo == null)
@@ -32,10 +24,5 @@ public class GithubRepo {
 		} catch (IOException e) {
 			throw new GitHubException( "Failed to get repository", e );
 		}
-	}
-
-	@Override
-	public String toString() {
-		return "GithubRepo [name=" + name + ", owner=" + owner + "]";
 	}
 }
