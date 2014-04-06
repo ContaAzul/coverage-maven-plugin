@@ -31,7 +31,7 @@ public class PullRequestValidatorBuilderTest {
 	public void setup() throws IOException {
 		initMocks( this );
 		repo = new GithubRepo( "caarlos0", "coverage-maven-plugin" );
-		TestUtil.createTmpData();
+		TestResources.setup();
 
 		when( build.getDirectory() ).thenReturn( new File( "target/tmp/target/" ).getAbsolutePath() );
 		when( build.getSourceDirectory() ).thenReturn( new File( "target/tmp/src" ).getAbsolutePath() );
