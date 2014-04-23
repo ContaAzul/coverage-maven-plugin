@@ -2,7 +2,6 @@ package com.contaazul.coverage.cobertura;
 
 import java.io.File;
 
-import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -13,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import com.contaazul.coverage.cobertura.entity.Coverage;
 
 public class Parser {
+	private static final String ACCESS_EXTERNAL_DTD = "http://javax.xml.XMLConstants/property/accessExternalDTD";
 	private static final Logger logger = LoggerFactory.getLogger( Parser.class );
 	private JAXBContext jax;
 
@@ -30,7 +30,7 @@ public class Parser {
 	}
 
 	private Unmarshaller createUnmarshaller() throws JAXBException {
-		System.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, "all");
+		System.setProperty(ACCESS_EXTERNAL_DTD, "all");
 		return jax.createUnmarshaller();
 	}
 
