@@ -24,8 +24,10 @@ import com.contaazul.coverage.pullrequest.analyser.FileAnalyser;
 import com.google.common.collect.Lists;
 
 // XXX this class has too much responsibility.
-public abstract class AbstractPullRequestValidator implements PullRequestValidator {
-	private static final Logger logger = LoggerFactory.getLogger( PullRequestValidator.class );
+public abstract class AbstractPullRequestValidator implements
+		PullRequestValidator {
+	private static final Logger logger = LoggerFactory
+			.getLogger(PullRequestValidator.class);
 	private final int minCoverage;
 	private final GithubService gh;
 	private final ChunkBlammer blammer;
@@ -33,7 +35,7 @@ public abstract class AbstractPullRequestValidator implements PullRequestValidat
 	public AbstractPullRequestValidator(GithubService gh, int minCoverage) {
 		this.gh = gh;
 		this.minCoverage = minCoverage;
-		this.blammer = new ChunkBlammer( gh, minCoverage );
+		this.blammer = new ChunkBlammer(gh, minCoverage);
 	}
 
 	/*
@@ -43,60 +45,65 @@ public abstract class AbstractPullRequestValidator implements PullRequestValidat
 	 */
 	@Override
 	public void validate(CoverageMavenProject project) {
-		final ClazzMapper mapper = new ClazzMapperImpl( project );
+		final ClazzMapper mapper = new ClazzMapperImpl(project);
 		final List<Cobertura> coberturas = Lists.newArrayList();
 		for (CommitFile file : gh.getPullRequestCommitFiles())
-			addTo( coberturas, getCobertura( mapper, file ) );
-		checkTotalCoverage( map( coberturas ), project );
+			addTo(coberturas, getCobertura(mapper, file));
+		checkTotalCoverage(map(coberturas), project);
 	}
 
 	private Cobertura getCobertura(ClazzMapper mapper, CommitFile file) {
-		logger.debug( "File: " + file.getFilename() );
+		logger.debug("File: " + file.getFilename());
 		if (file.getPatch() == null)
 			return nullCobertura();
 
-		final LinePositioner positioner = createLinePositioner( file );
-		final LineCoverager coverager = createLineCoverager( mapper, file );
+		final LinePositioner positioner = createLinePositioner(file);
+		final LineCoverager coverager = createLineCoverager(mapper, file);
 		if (positioner == null || coverager == null)
 			return nullCobertura();
 
-		return new FileAnalyser( blammer, coverager, positioner )
-				.analyse( file, positioner, coverager );
+		return new FileAnalyser(blammer, coverager, positioner)
+				.analyse(file, positioner, coverager);
 	}
 
-	private void checkTotalCoverage(Cobertura cobertura, CoverageMavenProject project) {
-		logger.info( String.format( BUILD, project.getArtifactId(), cobertura.getCoverage(), minCoverage ) );
-		if (cobertura.isLowerThan( minCoverage ))
-			blameLowCoverage( cobertura, project );
+	private void checkTotalCoverage(Cobertura cobertura,
+			CoverageMavenProject project) {
+		logger.info(String.format(BUILD, project.getArtifactId(),
+				cobertura.getCoverage(), minCoverage));
+		if (cobertura.isLowerThan(minCoverage))
+			blameLowCoverage(cobertura, project);
 	}
 
-	private void blameLowCoverage(Cobertura cobertura, CoverageMavenProject project) {
-		gh.createComment( format( cobertura, project ) );
+	private void blameLowCoverage(Cobertura cobertura,
+			CoverageMavenProject project) {
+		gh.createComment(format(cobertura, project));
 		if (breakOnLowCoverage())
-			throw new UndercoveredException( project, cobertura, minCoverage );
+			throw new UndercoveredException(project, cobertura, minCoverage);
 	}
 
 	private String format(Cobertura cobertura, CoverageMavenProject project) {
-		return String.format( PULL_REQUEST, project.getArtifactId(), cobertura.getCoverage(),
-				minCoverage );
+		return String.format(PULL_REQUEST, project.getArtifactId(),
+				cobertura.getCoverage(),
+				minCoverage);
 	}
 
 	protected abstract boolean breakOnLowCoverage();
 
 	private Cobertura nullCobertura() {
-		logger.debug( "Null Cobertura" );
+		logger.debug("Null Cobertura");
 		return new NullCobertura();
 	}
 
-	private LineCoverager createLineCoverager(ClazzMapper mapper, CommitFile commitFile) {
-		logger.debug( "filename: " + commitFile.getFilename() );
-		Clazz clazz = mapper.getClazz( commitFile.getFilename() );
+	private LineCoverager createLineCoverager(ClazzMapper mapper,
+			CommitFile commitFile) {
+		logger.debug("filename: " + commitFile.getFilename());
+		Clazz clazz = mapper.getClazz(commitFile.getFilename());
 		if (clazz == null)
 			return null;
-		return new LineCoveragerImpl( clazz );
+		return new LineCoveragerImpl(clazz);
 	}
 
 	private LinePositioner createLinePositioner(CommitFile cf) {
-		return new PatchLinePositioner( cf.getPatch() );
+		return new PatchLinePositioner(cf.getPatch());
 	}
 }

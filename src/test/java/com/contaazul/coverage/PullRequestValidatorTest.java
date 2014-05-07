@@ -42,39 +42,43 @@ public class PullRequestValidatorTest {
 
 	@Before
 	public void init() throws IOException {
-		initMocks( this );
-		final File patchFile = new File( "src/test/resources/2.patch" );
-		patch = Files.toString( patchFile, Charsets.UTF_8 );
+		initMocks(this);
+		final File patchFile = new File("src/test/resources/2.patch");
+		patch = Files.toString(patchFile, Charsets.UTF_8);
 
-		when( cov.getPackages() ).thenReturn( Arrays.asList( pack ) );
-		when( pack.getClasses() ).thenReturn( Arrays.asList( clazz ) );
+		when(cov.getPackages()).thenReturn(Arrays.asList(pack));
+		when(pack.getClasses()).thenReturn(Arrays.asList(clazz));
 
 	}
 
 	@Test(expected = UndercoveredException.class)
 	public void testValidateInvalid() throws Exception {
-		when( clazz.getLines() ).thenReturn( Arrays.asList( new Line( 10, 20, false, null, null ) ) );
-		validator = new BuildBreakerPullRequestValidator( gh, 110 );
-		CoverageMavenProject project = mock( CoverageMavenProject.class );
-		when( project.getCoverage() ).thenReturn( cov );
-		when( project.getSrcFolder() ).thenReturn( "src/main/java" );
-		validator.validate( project );
+		when(clazz.getLines()).thenReturn(
+				Arrays.asList(new Line(10, 20, false, null, null)));
+		validator = new BuildBreakerPullRequestValidator(gh, 110);
+		CoverageMavenProject project = mock(CoverageMavenProject.class);
+		when(project.getCoverage()).thenReturn(cov);
+		when(project.getSrcFolder()).thenReturn("src/main/java");
+		validator.validate(project);
 	}
 
 	@Test
 	public void testValidate() throws Exception {
-		when( pack.getName() ).thenReturn( "com.contaazul.coverage.pullrequest" );
-		when( clazz.getLines() ).thenReturn( Arrays.asList( new Line( 10, 20, false, null, null ) ) );
-		when( clazz.getName() ).thenReturn( "com.contaazul.coverage.pullrequest.PullRequestValidatorImpl.java" );
+		when(pack.getName()).thenReturn("com.contaazul.coverage.pullrequest");
+		when(clazz.getLines()).thenReturn(
+				Arrays.asList(new Line(10, 20, false, null, null)));
+		when(clazz.getName())
+				.thenReturn(
+						"com.contaazul.coverage.pullrequest.PullRequestValidatorImpl.java");
 
 		CommitFile f = new CommitFile();
-		f.setPatch( patch );
-		f.setFilename( "src/main/java/com/contaazul/coverage/pullrequest/PullRequestValidatorImpl.java" );
-		when( gh.getPullRequestCommitFiles() ).thenReturn( Arrays.asList( f ) );
-		validator = new BuildBreakerPullRequestValidator( gh, 0 );
-		CoverageMavenProject project = mock( CoverageMavenProject.class );
-		when( project.getCoverage() ).thenReturn( cov );
-		when( project.getSrcFolder() ).thenReturn( "src/main/java" );
-		validator.validate( project );
+		f.setPatch(patch);
+		f.setFilename("src/main/java/com/contaazul/coverage/pullrequest/PullRequestValidatorImpl.java");
+		when(gh.getPullRequestCommitFiles()).thenReturn(Arrays.asList(f));
+		validator = new BuildBreakerPullRequestValidator(gh, 0);
+		CoverageMavenProject project = mock(CoverageMavenProject.class);
+		when(project.getCoverage()).thenReturn(cov);
+		when(project.getSrcFolder()).thenReturn("src/main/java");
+		validator.validate(project);
 	}
 }

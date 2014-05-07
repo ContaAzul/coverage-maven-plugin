@@ -29,14 +29,16 @@ public class PullRequestValidatorBuilderTest {
 
 	@Before
 	public void setup() throws IOException {
-		initMocks( this );
-		repo = new GithubRepo( "caarlos0", "coverage-maven-plugin" );
+		initMocks(this);
+		repo = new GithubRepo("caarlos0", "coverage-maven-plugin");
 		TestResources.setup();
 
-		when( build.getDirectory() ).thenReturn( new File( "target/tmp/target/" ).getAbsolutePath() );
-		when( build.getSourceDirectory() ).thenReturn( new File( "target/tmp/src" ).getAbsolutePath() );
-		when( project.getBasedir() ).thenReturn( new File( "target/tmp" ) );
-		when( project.getBuild() ).thenReturn( build );
+		when(build.getDirectory()).thenReturn(
+				new File("target/tmp/target/").getAbsolutePath());
+		when(build.getSourceDirectory()).thenReturn(
+				new File("target/tmp/src").getAbsolutePath());
+		when(project.getBasedir()).thenReturn(new File("target/tmp"));
+		when(project.getBuild()).thenReturn(build);
 	}
 
 	@Test(expected = CoverageException.class)
@@ -48,24 +50,24 @@ public class PullRequestValidatorBuilderTest {
 	@Test
 	public void testValid() throws Exception {
 		PullRequestValidator validator = new PullRequestValidatorBuilder()
-				.minCoverage( 70 )
-				.oauth2( "not_really_an_oauth_token" )
-				.pullRequest( 2 )
-				.repository( repo )
+				.minCoverage(70)
+				.oauth2("not_really_an_oauth_token")
+				.pullRequest(2)
+				.repository(repo)
 				.build();
-		assertNotNull( validator );
+		assertNotNull(validator);
 	}
 
 	@Test
 	public void testValidNonBreakeable() throws Exception {
 		PullRequestValidator validator = new PullRequestValidatorBuilder()
-				.minCoverage( 70 )
-				.oauth2( "not_really_an_oauth_token" )
-				.pullRequest( 2 )
-				.repository( repo )
-				.breakOnLowCov( false )
+				.minCoverage(70)
+				.oauth2("not_really_an_oauth_token")
+				.pullRequest(2)
+				.repository(repo)
+				.breakOnLowCov(false)
 				.build();
-		assertNotNull( validator );
+		assertNotNull(validator);
 	}
 
 }

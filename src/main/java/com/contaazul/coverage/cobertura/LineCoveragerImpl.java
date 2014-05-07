@@ -9,12 +9,13 @@ import com.contaazul.coverage.cobertura.entity.Clazz;
 import com.contaazul.coverage.cobertura.entity.Line;
 
 public class LineCoveragerImpl implements LineCoverager {
-	private static final Logger logger = LoggerFactory.getLogger( LineCoverager.class );
+	private static final Logger logger = LoggerFactory
+			.getLogger(LineCoverager.class);
 	private final Clazz clazz;
 
 	public LineCoveragerImpl(Clazz clazz) {
 		if (clazz == null)
-			throw new CoveragerException( "Clazz cant be null." );
+			throw new CoveragerException("Clazz cant be null.");
 		this.clazz = clazz;
 	}
 
@@ -25,8 +26,8 @@ public class LineCoveragerImpl implements LineCoverager {
 	 */
 	@Override
 	public Double getLineCoverage(int lineNumber) {
-		Line line = findLine( lineNumber );
-		return getCoverageOf( line );
+		Line line = findLine(lineNumber);
+		return getCoverageOf(line);
 	}
 
 	private Line findLine(int lineNumber) {
@@ -40,14 +41,15 @@ public class LineCoveragerImpl implements LineCoverager {
 		if (line == null)
 			return null;
 		if (line.isBranch() && line.getConditionCoverage() != null)
-			return getConditionCoverage( line );
+			return getConditionCoverage(line);
 		return line.getHits() > 0 ? 100.0 : 0.0;
 	}
 
 	private double getConditionCoverage(Line line) {
-		final Pattern regex = Pattern.compile( "%.*" );
-		final String value = regex.matcher( line.getConditionCoverage() ).replaceAll( "" );
-		logger.debug( "Value parsed " + value );
-		return Double.parseDouble( value );
+		final Pattern regex = Pattern.compile("%.*");
+		final String value = regex.matcher(line.getConditionCoverage())
+				.replaceAll("");
+		logger.debug("Value parsed " + value);
+		return Double.parseDouble(value);
 	}
 }

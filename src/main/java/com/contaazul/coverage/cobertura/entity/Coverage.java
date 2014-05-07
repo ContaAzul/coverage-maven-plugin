@@ -25,7 +25,7 @@ public class Coverage {
 
 	public Package getPackage(String name) {
 		for (Package pack : getPackages())
-			if (pack.getName().equals( name ))
+			if (pack.getName().equals(name))
 				return pack;
 		return null;
 	}

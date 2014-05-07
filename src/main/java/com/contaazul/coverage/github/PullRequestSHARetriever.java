@@ -10,7 +10,7 @@ import com.google.common.collect.Maps;
 
 public class PullRequestSHARetriever {
 	private static final Logger logger = LoggerFactory
-			.getLogger( PullRequestSHARetriever.class );
+			.getLogger(PullRequestSHARetriever.class);
 	private final GithubService service;
 	private Map<String, String> shas;
 
@@ -24,23 +24,23 @@ public class PullRequestSHARetriever {
 			return shas;
 		shas = Maps.newHashMap();
 		for (CommitFile commitFile : service.getFiles())
-			addSHA( commitFile );
+			addSHA(commitFile);
 		return shas;
 	}
 
 	private void addSHA(CommitFile commitFile) {
 		String file = commitFile.getFilename();
-		String sha = commitFile.getBlobUrl().replaceAll( ".*blob/", "" )
-				.replaceAll( "/.*", "" );
-		logger.debug( "FILENAME: " + file + " SHA " + sha );
-		shas.put( file, sha );
+		String sha = commitFile.getBlobUrl().replaceAll(".*blob/", "")
+				.replaceAll("/.*", "");
+		logger.debug("FILENAME: " + file + " SHA " + sha);
+		shas.put(file, sha);
 	}
 
 	public String get(CommitFile cf) {
-		return get( cf.getFilename() );
+		return get(cf.getFilename());
 	}
 
 	private String get(String filename) {
-		return getFilesSha().get( filename );
+		return getFilesSha().get(filename);
 	}
 }

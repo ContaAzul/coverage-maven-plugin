@@ -13,29 +13,29 @@ public class PullRequestCommitCommentTest {
 
 	@Test
 	public void testValidComment() throws Exception {
-		comment = new PullRequestCommitComment( 1, 0, SHA, PATH, 1 );
-		assertTrue( comment.isValid() );
-		assertNotNull( comment.get() );
+		comment = new PullRequestCommitComment(1, 0, SHA, PATH, 1);
+		assertTrue(comment.isValid());
+		assertNotNull(comment.get());
 	}
-	
+
 	@Test
 	public void testInvalidSha() throws Exception {
-		comment = new PullRequestCommitComment( 1, 0, null, PATH, 1 );
-		assertFalse( comment.isValid() );
-		assertNotNull( comment.get() );
+		comment = new PullRequestCommitComment(1, 0, null, PATH, 1);
+		assertFalse(comment.isValid());
+		assertNotNull(comment.get());
 	}
-	
+
 	@Test
 	public void testInvalidPosition() throws Exception {
-		comment = new PullRequestCommitComment( 1, 0, SHA, PATH, -1 );
-		assertFalse( comment.isValid() );
-		assertNotNull( comment.get() );
+		comment = new PullRequestCommitComment(1, 0, SHA, PATH, -1);
+		assertFalse(comment.isValid());
+		assertNotNull(comment.get());
 	}
-	
+
 	@Test
 	public void testInvalidPath() throws Exception {
-		comment = new PullRequestCommitComment( 1, 0, SHA, null, -1 );
-		assertFalse( comment.isValid() );
-		assertNotNull( comment.get() );
+		comment = new PullRequestCommitComment(1, 0, SHA, null, -1);
+		assertFalse(comment.isValid());
+		assertNotNull(comment.get());
 	}
 }

@@ -19,26 +19,26 @@ public class CoberturaImplTest {
 
 	@Test
 	public void testWithoutIncrement() throws Exception {
-		assertEquals( 100.0, cobertura.getCoverage(), 0.0001 );
-		assertEquals( 0, cobertura.getLastLine() );
-		assertTrue( cobertura.isCounted() );
+		assertEquals(100.0, cobertura.getCoverage(), 0.0001);
+		assertEquals(0, cobertura.getLastLine());
+		assertTrue(cobertura.isCounted());
 	}
 
 	@Test
 	public void testIncrement() throws Exception {
-		cobertura.incrementCoverage( 80.0 );
-		cobertura.incrementCoverage( 20.0 );
-		assertEquals( 50.0, cobertura.getCoverage(), 0.0001 );
-		assertEquals( 0, cobertura.getLastLine() );
-		assertTrue( cobertura.isCounted() );
+		cobertura.incrementCoverage(80.0);
+		cobertura.incrementCoverage(20.0);
+		assertEquals(50.0, cobertura.getCoverage(), 0.0001);
+		assertEquals(0, cobertura.getLastLine());
+		assertTrue(cobertura.isCounted());
 	}
 
 	@Test
 	public void testIncrementWithLineNumber() throws Exception {
-		cobertura.incrementCoverage( 2, 100.0 );
-		cobertura.incrementCoverage( 5, 50.0 );
-		assertEquals( 75.0, cobertura.getCoverage(), 0.001 );
-		assertEquals( 5, cobertura.getLastLine() );
-		assertTrue( cobertura.isCounted() );
+		cobertura.incrementCoverage(2, 100.0);
+		cobertura.incrementCoverage(5, 50.0);
+		assertEquals(75.0, cobertura.getCoverage(), 0.001);
+		assertEquals(5, cobertura.getLastLine());
+		assertTrue(cobertura.isCounted());
 	}
 }

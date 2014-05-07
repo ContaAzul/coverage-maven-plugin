@@ -61,7 +61,8 @@ public class Method {
 
 	@Override
 	public String toString() {
-		return "Method [name=" + name + ", signature=" + signature + ", lineRate=" + lineRate + ", branchRate="
+		return "Method [name=" + name + ", signature=" + signature
+				+ ", lineRate=" + lineRate + ", branchRate="
 				+ branchRate + ", complexity=" + complexity + "]";
 	}
 

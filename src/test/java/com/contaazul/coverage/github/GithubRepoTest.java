@@ -24,20 +24,22 @@ public class GithubRepoTest {
 
 	@Before
 	public void init() throws IOException {
-		initMocks( this );
-		when( service.getRepository( "caarlos0", "coverage-maven-plugin" ) ).thenReturn( ghRepo );
-		repo = spy( new GithubRepo( "caarlos0", "coverage-maven-plugin" ) );
+		initMocks(this);
+		when(service.getRepository("caarlos0", "coverage-maven-plugin"))
+				.thenReturn(ghRepo);
+		repo = spy(new GithubRepo("caarlos0", "coverage-maven-plugin"));
 	}
 
 	@Test
 	public void testSameInstance() throws Exception {
-		Repository connectedRepo = repo.connect( service );
-		assertEquals( connectedRepo, repo.connect( service ) );
+		Repository connectedRepo = repo.connect(service);
+		assertEquals(connectedRepo, repo.connect(service));
 	}
-	
+
 	@Test(expected = GitHubException.class)
 	public void testConnectException() throws Exception {
-		when(service.getRepository( anyString(), anyString() )).thenThrow( IOException.class );
-		repo.connect( service );
+		when(service.getRepository(anyString(), anyString())).thenThrow(
+				IOException.class);
+		repo.connect(service);
 	}
 }

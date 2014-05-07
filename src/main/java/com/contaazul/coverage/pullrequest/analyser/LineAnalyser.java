@@ -5,9 +5,10 @@ import com.contaazul.coverage.pullrequest.Cobertura;
 
 public class LineAnalyser {
 	// TODO side-effects!
-	public final void analyse(int line, LineCoverager coverager, Cobertura chunkCoverage) {
-		final Double lineCoverage = coverager.getLineCoverage( line );
+	public final void analyse(int line, LineCoverager coverager,
+			Cobertura chunkCoverage) {
+		final Double lineCoverage = coverager.getLineCoverage(line);
 		if (lineCoverage != null)
-			chunkCoverage.incrementCoverage( line, lineCoverage );
+			chunkCoverage.incrementCoverage(line, lineCoverage);
 	}
 }

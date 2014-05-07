@@ -33,7 +33,8 @@ public class Line {
 	public Line() {
 	}
 
-	public Line(int number, int hits, boolean branch, String conditionCoverage, List<Condition> conditions) {
+	public Line(int number, int hits, boolean branch, String conditionCoverage,
+			List<Condition> conditions) {
 		super();
 		this.number = number;
 		this.hits = hits;
@@ -66,7 +67,8 @@ public class Line {
 
 	@Override
 	public String toString() {
-		return "Line [number=" + number + ", hits=" + hits + ", branch=" + branch + ", conditionCoverage="
+		return "Line [number=" + number + ", hits=" + hits + ", branch="
+				+ branch + ", conditionCoverage="
 				+ conditionCoverage + "]";
 	}
 }

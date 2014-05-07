@@ -23,26 +23,26 @@ public class ChunkBlammerTest {
 	private ChunkBlammer blammer;
 	private CommitFile file;
 	private Cobertura chunkCoverage;
-	
+
 	@Before
 	public void init() {
-		initMocks( this );
-		blammer = new ChunkBlammer( gh, 70 );
+		initMocks(this);
+		blammer = new ChunkBlammer(gh, 70);
 		file = new CommitFile();
 		chunkCoverage = new CoberturaImpl();
 	}
-	
+
 	@Test
 	public void testLowCoverage() throws Exception {
-		chunkCoverage.incrementCoverage( 1.0 );
-		blammer.blame( file, chunkCoverage, positioner );
-		verify( gh ).createComment( any(PullRequestCommitComment.class) );
+		chunkCoverage.incrementCoverage(1.0);
+		blammer.blame(file, chunkCoverage, positioner);
+		verify(gh).createComment(any(PullRequestCommitComment.class));
 	}
-	
+
 	@Test
 	public void testHishCoverage() throws Exception {
-		chunkCoverage.incrementCoverage( 100.0 );
-		blammer.blame( file, chunkCoverage, positioner );
-		verify( gh, never() ).createComment( any(PullRequestCommitComment.class) );
+		chunkCoverage.incrementCoverage(100.0);
+		blammer.blame(file, chunkCoverage, positioner);
+		verify(gh, never()).createComment(any(PullRequestCommitComment.class));
 	}
 }

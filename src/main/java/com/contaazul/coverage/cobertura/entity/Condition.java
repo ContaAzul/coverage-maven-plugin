@@ -41,6 +41,7 @@ public class Condition {
 
 	@Override
 	public String toString() {
-		return "Condition [number=" + number + ", type=" + type + ", coverage=" + coverage + "]";
+		return "Condition [number=" + number + ", type=" + type + ", coverage="
+				+ coverage + "]";
 	}
 }

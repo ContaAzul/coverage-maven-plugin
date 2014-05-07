@@ -42,19 +42,20 @@ public class PullRequestValidatorBuilder {
 
 	public PullRequestValidator build() {
 		validate();
-		final GithubService gh = new GithubServiceImpl( repo, oauth2, pullRequestId );
-		return create( gh );
+		final GithubService gh = new GithubServiceImpl(repo, oauth2,
+				pullRequestId);
+		return create(gh);
 	}
 
 	private PullRequestValidator create(final GithubService gh) {
 		if (breakOnLowCov)
-			return new BuildBreakerPullRequestValidator( gh, minCoverage );
+			return new BuildBreakerPullRequestValidator(gh, minCoverage);
 		else
-			return new NonBuildBreakerPullRequestValidator( gh, minCoverage );
+			return new NonBuildBreakerPullRequestValidator(gh, minCoverage);
 	}
 
 	private void validate() {
 		if (repo == null || oauth2 == null || pullRequestId < 1)
-			throw new CoverageException( "Can't build GithubService." );
+			throw new CoverageException("Can't build GithubService.");
 	}
 }

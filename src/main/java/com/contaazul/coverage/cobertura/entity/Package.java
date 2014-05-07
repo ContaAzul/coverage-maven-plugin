@@ -54,13 +54,14 @@ public class Package {
 
 	@Override
 	public String toString() {
-		return "Package [name=" + name + ", lineRate=" + lineRate + ", branchRate=" + branchRate + ", complexity="
+		return "Package [name=" + name + ", lineRate=" + lineRate
+				+ ", branchRate=" + branchRate + ", complexity="
 				+ complexity + "]";
 	}
 
 	public Clazz getClass(String name) {
 		for (Clazz clazz : getClasses())
-			if (clazz.getName().equals( name ))
+			if (clazz.getName().equals(name))
 				return clazz;
 		return null;
 	}

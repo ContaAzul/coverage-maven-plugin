@@ -6,6 +6,6 @@ public class GitHubException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 
 	public GitHubException(String msg, IOException e) {
-		super( msg, e );
+		super(msg, e);
 	}
 }

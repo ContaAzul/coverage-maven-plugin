@@ -37,24 +37,25 @@ public class FileAnalyserTest {
 
 	@Before
 	public void init() {
-		initMocks( this );
-		this.analyser = new FileAnalyser( blammer, coverager, positioner );
+		initMocks(this);
+		this.analyser = new FileAnalyser(blammer, coverager, positioner);
 	}
 
 	@Test
 	public void testNullFileCoverage() throws Exception {
-		when( positioner.getChunks() ).thenReturn( new ArrayList<Map<Integer, Integer>>() );
-		Cobertura cov = analyser.analyse( commitFile, positioner, coverager );
-		assertEquals( cov.getCoverage(), 100.0, 0.01 );
+		when(positioner.getChunks()).thenReturn(
+				new ArrayList<Map<Integer, Integer>>());
+		Cobertura cov = analyser.analyse(commitFile, positioner, coverager);
+		assertEquals(cov.getCoverage(), 100.0, 0.01);
 	}
 
 	@Test
 	public void testNotNullFileCoverage() throws Exception {
 		Map<Integer, Integer> map = new HashMap<Integer, Integer>();
-		map.put( 1, 10 );
-		when(coverager.getLineCoverage( 1 )).thenReturn( 10.0 );
-		when( positioner.getChunks() ).thenReturn( Arrays.asList( map ) );
-		Cobertura cov = analyser.analyse( commitFile, positioner, coverager );
-		assertEquals( cov.getCoverage(), 10.0, 0.01 );
+		map.put(1, 10);
+		when(coverager.getLineCoverage(1)).thenReturn(10.0);
+		when(positioner.getChunks()).thenReturn(Arrays.asList(map));
+		Cobertura cov = analyser.analyse(commitFile, positioner, coverager);
+		assertEquals(cov.getCoverage(), 10.0, 0.01);
 	}
 }

@@ -7,7 +7,8 @@ public class CoberturaImpl implements Cobertura {
 
 	@Override
 	public void incrementCoverage(double coverage) {
-		logger.debug( "Incrementing actual coverage from " + this.coverage + " with " + coverage );
+		logger.debug("Incrementing actual coverage from " + this.coverage
+				+ " with " + coverage);
 		this.coverage += coverage;
 		count++;
 	}
@@ -15,12 +16,12 @@ public class CoberturaImpl implements Cobertura {
 	@Override
 	public void incrementCoverage(int line, double coverage) {
 		this.lastLine = line;
-		incrementCoverage( coverage );
+		incrementCoverage(coverage);
 	}
 
 	@Override
 	public double getCoverage() {
-		logger.debug( "Count " + count );
+		logger.debug("Count " + count);
 		if (count == 0)
 			return 100;
 		return this.coverage / count;

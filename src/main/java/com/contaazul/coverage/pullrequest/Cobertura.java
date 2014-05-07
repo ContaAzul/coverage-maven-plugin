@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public interface Cobertura {
-	final Logger logger = LoggerFactory.getLogger( Cobertura.class );
+	final Logger logger = LoggerFactory.getLogger(Cobertura.class);
 
 	void incrementCoverage(double coverage);
 

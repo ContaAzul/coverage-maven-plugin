@@ -11,7 +11,8 @@ public class PullRequestCommitComment {
 	private String path;
 	private int position;
 
-	public PullRequestCommitComment(double coverage, int minCoverage, String sha, String path, int position) {
+	public PullRequestCommitComment(double coverage, int minCoverage,
+			String sha, String path, int position) {
 		super();
 		this.coverage = coverage;
 		this.minCoverage = minCoverage;
@@ -22,10 +23,10 @@ public class PullRequestCommitComment {
 
 	public CommitComment get() {
 		CommitComment comment = new CommitComment();
-		comment.setBody( getMessageBody() );
-		comment.setCommitId( sha );
-		comment.setPath( path );
-		comment.setPosition( position );
+		comment.setBody(getMessageBody());
+		comment.setCommitId(sha);
+		comment.setPath(path);
+		comment.setPosition(position);
 		return comment;
 	}
 
@@ -35,11 +36,13 @@ public class PullRequestCommitComment {
 
 	@Override
 	public String toString() {
-		return "PullRequestComment [coverage=" + coverage + ", minCoverage=" + minCoverage + ", sha=" + sha + ", path="
-				+ path + ", position=" + position + ", getMessageBody()=" + getMessageBody() + "]";
+		return "PullRequestComment [coverage=" + coverage + ", minCoverage="
+				+ minCoverage + ", sha=" + sha + ", path="
+				+ path + ", position=" + position + ", getMessageBody()="
+				+ getMessageBody() + "]";
 	}
 
 	private String getMessageBody() {
-		return String.format( COMMIT, coverage, minCoverage );
+		return String.format(COMMIT, coverage, minCoverage);
 	}
 }

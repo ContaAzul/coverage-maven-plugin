@@ -19,10 +19,10 @@ public class GithubRepo {
 	public Repository connect(RepositoryService service) {
 		try {
 			if (repo == null)
-				repo = service.getRepository( owner, name );
+				repo = service.getRepository(owner, name);
 			return repo;
 		} catch (IOException e) {
-			throw new GitHubException( "Failed to get repository", e );
+			throw new GitHubException("Failed to get repository", e);
 		}
 	}
 }

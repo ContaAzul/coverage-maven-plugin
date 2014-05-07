@@ -28,24 +28,24 @@ public class LineAnalyserTest {
 
 	@Test
 	public void testNullLineCoverage() throws Exception {
-		final LineCoverager coverager = mock( LineCoverager.class );
-		final Cobertura cobertura = spy( new CoberturaImpl() );
-		when( coverager.getLineCoverage( anyInt() ) ).thenReturn( null );
-		analyser.analyse( 1, coverager, cobertura );
-		verify( cobertura, never() ).incrementCoverage( anyDouble() );
-		verify( cobertura, never() ).incrementCoverage( anyInt(), anyDouble() );
-		assertEquals( 100.0, cobertura.getCoverage(), 0.01 );
+		final LineCoverager coverager = mock(LineCoverager.class);
+		final Cobertura cobertura = spy(new CoberturaImpl());
+		when(coverager.getLineCoverage(anyInt())).thenReturn(null);
+		analyser.analyse(1, coverager, cobertura);
+		verify(cobertura, never()).incrementCoverage(anyDouble());
+		verify(cobertura, never()).incrementCoverage(anyInt(), anyDouble());
+		assertEquals(100.0, cobertura.getCoverage(), 0.01);
 	}
 
 	@Test
 	public void testLineCoverage() throws Exception {
-		final LineCoverager coverager = mock( LineCoverager.class );
-		final Cobertura cobertura = spy( new CoberturaImpl() );
-		when( coverager.getLineCoverage( anyInt() ) ).thenReturn( 90.0 );
-		analyser.analyse( 1, coverager, cobertura );
-		verify( cobertura, times( 1 ) ).incrementCoverage( anyDouble() );
-		verify( cobertura, times( 1 ) ).incrementCoverage( anyInt(), anyDouble() );
-		assertEquals( 1, cobertura.getLastLine() );
-		assertEquals( 90.0, cobertura.getCoverage(), 0.01 );
+		final LineCoverager coverager = mock(LineCoverager.class);
+		final Cobertura cobertura = spy(new CoberturaImpl());
+		when(coverager.getLineCoverage(anyInt())).thenReturn(90.0);
+		analyser.analyse(1, coverager, cobertura);
+		verify(cobertura, times(1)).incrementCoverage(anyDouble());
+		verify(cobertura, times(1)).incrementCoverage(anyInt(), anyDouble());
+		assertEquals(1, cobertura.getLastLine());
+		assertEquals(90.0, cobertura.getCoverage(), 0.01);
 	}
 }

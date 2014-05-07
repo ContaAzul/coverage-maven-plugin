@@ -26,5 +26,4 @@ public interface GithubService {
 
 	IssueService getIssueService();
 
-
 }

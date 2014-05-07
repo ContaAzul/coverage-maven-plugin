@@ -71,7 +71,8 @@ public class Clazz {
 
 	@Override
 	public String toString() {
-		return "Clazz [name=" + name + ", filename=" + filename + ", lineRate=" + lineRate + ", branchRate="
+		return "Clazz [name=" + name + ", filename=" + filename + ", lineRate="
+				+ lineRate + ", branchRate="
 				+ branchRate + ", complexity=" + complexity + "]";
 	}
 }

@@ -17,14 +17,16 @@ import com.google.common.collect.Lists;
 public class FileAnalyser {
 	private final ChunkAnalyser analyser;
 
-	public FileAnalyser(ChunkBlammer blammer, LineCoverager coverager, LinePositioner positioner) {
-		this.analyser = new ChunkAnalyser( blammer, coverager, positioner );
+	public FileAnalyser(ChunkBlammer blammer, LineCoverager coverager,
+			LinePositioner positioner) {
+		this.analyser = new ChunkAnalyser(blammer, coverager, positioner);
 	}
 
-	public Cobertura analyse(CommitFile file, final LinePositioner positioner, final LineCoverager coverager) {
+	public Cobertura analyse(CommitFile file, final LinePositioner positioner,
+			final LineCoverager coverager) {
 		final List<Cobertura> fileCoverage = Lists.newArrayList();
 		for (Map<Integer, Integer> chunk : positioner.getChunks())
-			addTo( fileCoverage, analyser.analyse( chunk, file ) );
-		return map( fileCoverage );
+			addTo(fileCoverage, analyser.analyse(chunk, file));
+		return map(fileCoverage);
 	}
 }

@@ -20,7 +20,8 @@ import com.contaazul.coverage.pullrequest.PullRequestValidatorBuilder;
  */
 public class CoveragePullRequestMojo extends AbstractMojo {
 
-	private static final Logger logger = LoggerFactory.getLogger( CoveragePullRequestMojo.class );
+	private static final Logger logger = LoggerFactory
+			.getLogger(CoveragePullRequestMojo.class);
 
 	/**
 	 * Set OAuth2 token
@@ -85,15 +86,15 @@ public class CoveragePullRequestMojo extends AbstractMojo {
 	public void execute() {
 		if (project.isExecutionRoot() && reactorProjects.isEmpty())
 			return;
-		logger.info( "Executing on " + project );
+		logger.info("Executing on " + project);
 		final PullRequestValidator pr = new PullRequestValidatorBuilder()
-				.oauth2( oauth2 )
-				.pullRequest( pullRequestId )
-				.repository( new GithubRepo( repositoryName, repositoryOwner ) )
-				.minCoverage( minimumCoverage )
-				.breakOnLowCov( breakOnLowCov )
+				.oauth2(oauth2)
+				.pullRequest(pullRequestId)
+				.repository(new GithubRepo(repositoryName, repositoryOwner))
+				.minCoverage(minimumCoverage)
+				.breakOnLowCov(breakOnLowCov)
 				.build();
-		pr.validate( new CoverageMavenProject( project ) );
+		pr.validate(new CoverageMavenProject(project));
 
 	}
 }

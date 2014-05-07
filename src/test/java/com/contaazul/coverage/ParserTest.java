@@ -16,15 +16,16 @@ public class ParserTest {
 
 	@Test(expected = CoberturaException.class)
 	public void testParseNullFile() throws Exception {
-		assertNull( new Parser().parse( null ) );
+		assertNull(new Parser().parse(null));
 	}
 
 	@Test
 	public void testParse() throws Exception {
-		Coverage coverage = new Parser().parse( new File( "src/test/resources/coverage.xml" ) );
+		Coverage coverage = new Parser().parse(new File(
+				"src/test/resources/coverage.xml"));
 
-		assertNotNull( coverage );
-		assertNotNull( coverage.getPackages() );
-		assertFalse( coverage.getPackages().isEmpty() );
+		assertNotNull(coverage);
+		assertNotNull(coverage.getPackages());
+		assertFalse(coverage.getPackages().isEmpty());
 	}
 }

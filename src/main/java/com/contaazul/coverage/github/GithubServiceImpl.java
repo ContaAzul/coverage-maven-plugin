@@ -13,7 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class GithubServiceImpl implements GithubService {
-	private static final Logger logger = LoggerFactory.getLogger( GithubServiceImpl.class );
+	private static final Logger logger = LoggerFactory
+			.getLogger(GithubServiceImpl.class);
 
 	private final GitHubClient client;
 	private final int pullRequestId;
@@ -26,7 +27,7 @@ public class GithubServiceImpl implements GithubService {
 	public GithubServiceImpl(GithubRepo repo, String oauth2, int pullRequestId) {
 		this.repo = repo;
 		this.pullRequestId = pullRequestId;
-		client = new GitHubClient().setOAuth2Token( oauth2 );
+		client = new GitHubClient().setOAuth2Token(oauth2);
 	}
 
 	/*
@@ -37,7 +38,7 @@ public class GithubServiceImpl implements GithubService {
 	@Override
 	public RepositoryService getRepositoryService() {
 		if (repoService == null)
-			repoService = new RepositoryService( client );
+			repoService = new RepositoryService(client);
 		return repoService;
 	}
 
@@ -48,7 +49,7 @@ public class GithubServiceImpl implements GithubService {
 	 */
 	@Override
 	public Repository getRepository() {
-		return repo.connect( getRepositoryService() );
+		return repo.connect(getRepositoryService());
 	}
 
 	/*
@@ -60,9 +61,10 @@ public class GithubServiceImpl implements GithubService {
 	@Override
 	public List<CommitFile> getPullRequestCommitFiles() {
 		try {
-			return getPullRequestService().getFiles( getRepository(), pullRequestId );
+			return getPullRequestService().getFiles(getRepository(),
+					pullRequestId);
 		} catch (IOException e) {
-			throw new GitHubException( "Failed to get pull request commits", e );
+			throw new GitHubException("Failed to get pull request commits", e);
 		}
 	}
 
@@ -74,7 +76,7 @@ public class GithubServiceImpl implements GithubService {
 	@Override
 	public PullRequestService getPullRequestService() {
 		if (prService == null)
-			prService = new PullRequestService( client );
+			prService = new PullRequestService(client);
 		return prService;
 	}
 
@@ -86,7 +88,7 @@ public class GithubServiceImpl implements GithubService {
 	@Override
 	public IssueService getIssueService() {
 		if (issueService == null)
-			issueService = new IssueService( client );
+			issueService = new IssueService(client);
 		return issueService;
 
 	}
@@ -99,9 +101,10 @@ public class GithubServiceImpl implements GithubService {
 	@Override
 	public List<CommitFile> getFiles() {
 		try {
-			return getPullRequestService().getFiles( getRepository(), pullRequestId );
+			return getPullRequestService().getFiles(getRepository(),
+					pullRequestId);
 		} catch (IOException e) {
-			throw new GitHubException( "Failed to get pull request files", e );
+			throw new GitHubException("Failed to get pull request files", e);
 		}
 	}
 
@@ -115,28 +118,32 @@ public class GithubServiceImpl implements GithubService {
 	@Override
 	public void createComment(PullRequestCommitComment comment) {
 		if (comment.isValid())
-			comment( comment );
+			comment(comment);
 		else
-			logger.debug( "Comment is invalid: " + comment );
+			logger.debug("Comment is invalid: " + comment);
 	}
 
 	private void comment(PullRequestCommitComment comment) {
-		logger.debug( "Commenting: " + comment );
+		logger.debug("Commenting: " + comment);
 		try {
 			getPullRequestService()
-					.createComment( getRepository(), pullRequestId, comment.get() );
+					.createComment(getRepository(), pullRequestId,
+							comment.get());
 		} catch (Exception e) {
-			logger.error( "Failed to comment on PullRequest " + pullRequestId + ": " + comment, e );
+			logger.error("Failed to comment on PullRequest " + pullRequestId
+					+ ": " + comment, e);
 		}
 	}
 
 	@Override
 	public void createComment(String comment) {
-		logger.debug( "Commenting: " + comment );
+		logger.debug("Commenting: " + comment);
 		try {
-			getIssueService().createComment( getRepository(), pullRequestId, comment );
+			getIssueService().createComment(getRepository(), pullRequestId,
+					comment);
 		} catch (IOException e) {
-			logger.error( "Failed to comment on PullRequest " + pullRequestId + ": " + comment, e );
+			logger.error("Failed to comment on PullRequest " + pullRequestId
+					+ ": " + comment, e);
 		}
 	}
 

@@ -26,27 +26,28 @@ public class CoverageMavenProjectTest {
 
 	@Before
 	public void init() throws IOException {
-		initMocks( this );
+		initMocks(this);
 		TestResources.setup();
 	}
 
 	@Test
 	public void getCoverage() throws Exception {
-		when( build.getSourceDirectory() ).thenReturn( "target/tmp/src/main/java" );
-		when( build.getDirectory() ).thenReturn( "target/tmp/target" );
-		when( project.getBasedir() ).thenReturn( new File( "target/tmp" ) );
-		when( project.getBuild() ).thenReturn( build );
-		Coverage coverage = new CoverageMavenProject( project ).getCoverage();
-		assertFalse( coverage.getPackages().isEmpty() );
+		when(build.getSourceDirectory()).thenReturn("target/tmp/src/main/java");
+		when(build.getDirectory()).thenReturn("target/tmp/target");
+		when(project.getBasedir()).thenReturn(new File("target/tmp"));
+		when(project.getBuild()).thenReturn(build);
+		Coverage coverage = new CoverageMavenProject(project).getCoverage();
+		assertFalse(coverage.getPackages().isEmpty());
 	}
 
 	@Test
 	public void getCoverageNoCoverageXml() throws Exception {
-		when( build.getSourceDirectory() ).thenReturn( "target/tmpp/src/main/java" );
-		when( build.getDirectory() ).thenReturn( "target/tmpp/target" );
-		when( project.getBasedir() ).thenReturn( new File( "target/tmpp" ) );
-		when( project.getBuild() ).thenReturn( build );
-		Coverage coverage = new CoverageMavenProject( project ).getCoverage();
-		assertTrue( coverage.getPackages().isEmpty() );
+		when(build.getSourceDirectory())
+				.thenReturn("target/tmpp/src/main/java");
+		when(build.getDirectory()).thenReturn("target/tmpp/target");
+		when(project.getBasedir()).thenReturn(new File("target/tmpp"));
+		when(project.getBuild()).thenReturn(build);
+		Coverage coverage = new CoverageMavenProject(project).getCoverage();
+		assertTrue(coverage.getPackages().isEmpty());
 	}
 }

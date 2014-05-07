@@ -27,49 +27,50 @@ public class LineCoveragerTest {
 
 	@Test
 	public void emptyClazz() throws Exception {
-		cov = new LineCoveragerImpl( clazz );
-		assertTrue( cov.getLineCoverage( 1 ) == null );
+		cov = new LineCoveragerImpl(clazz);
+		assertTrue(cov.getLineCoverage(1) == null);
 	}
 
 	@Test
 	public void testInvalidLine() throws Exception {
-		clazz.getLines().add( new Line( 2, 10, false, null, null ) );
-		cov = new LineCoveragerImpl( clazz );
-		assertTrue( cov.getLineCoverage( 1 ) == null );
+		clazz.getLines().add(new Line(2, 10, false, null, null));
+		cov = new LineCoveragerImpl(clazz);
+		assertTrue(cov.getLineCoverage(1) == null);
 	}
 
 	@Test
 	public void testValidLineCovered() throws Exception {
-		clazz.getLines().add( new Line( 1, 10, false, null, null ) );
-		cov = new LineCoveragerImpl( clazz );
-		assertTrue( cov.getLineCoverage( 1 ) == 100.0 );
+		clazz.getLines().add(new Line(1, 10, false, null, null));
+		cov = new LineCoveragerImpl(clazz);
+		assertTrue(cov.getLineCoverage(1) == 100.0);
 	}
 
 	@Test
 	public void testValidLineUncovered() throws Exception {
-		clazz.getLines().add( new Line( 1, 0, false, null, null ) );
-		cov = new LineCoveragerImpl( clazz );
-		assertTrue( cov.getLineCoverage( 1 ) == 0.0 );
+		clazz.getLines().add(new Line(1, 0, false, null, null));
+		cov = new LineCoveragerImpl(clazz);
+		assertTrue(cov.getLineCoverage(1) == 0.0);
 	}
 
 	@Test
 	public void testValidBranchLine() throws Exception {
 		clazz.getLines().add(
-				new Line( 1, 10, true, "20% (1/10)", Arrays.asList( new Condition( 1, "jump", "20% (1/10)" ) ) ) );
-		cov = new LineCoveragerImpl( clazz );
-		assertTrue( cov.getLineCoverage( 1 ) == 20.0 );
+				new Line(1, 10, true, "20% (1/10)", Arrays
+						.asList(new Condition(1, "jump", "20% (1/10)"))));
+		cov = new LineCoveragerImpl(clazz);
+		assertTrue(cov.getLineCoverage(1) == 20.0);
 	}
 
 	@Test
 	public void testInvalidBranchLine() throws Exception {
-		clazz.getLines().add( new Line( 1, 10, true, "20% (1/10)", null ) );
-		cov = new LineCoveragerImpl( clazz );
-		assertTrue( cov.getLineCoverage( 1 ) == 20.0 );
+		clazz.getLines().add(new Line(1, 10, true, "20% (1/10)", null));
+		cov = new LineCoveragerImpl(clazz);
+		assertTrue(cov.getLineCoverage(1) == 20.0);
 	}
 
 	@Test(expected = CoveragerException.class)
 	public void testNullClazz() throws Exception {
-		cov = new LineCoveragerImpl( null );
-		assertFalse( cov.getLineCoverage( 1 ) > -1.0 );
+		cov = new LineCoveragerImpl(null);
+		assertFalse(cov.getLineCoverage(1) > -1.0);
 	}
 }
