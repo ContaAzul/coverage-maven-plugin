@@ -1,4 +1,4 @@
-coverage-maven-plugin
+coverage-maven-plugin [![Build Status](https://travis-ci.org/caarlos0/coverage-maven-plugin.svg?branch=master)](https://travis-ci.org/caarlos0/coverage-maven-plugin)
 =====================
 
 A maven plugin that will blame on pull requests pointing out
