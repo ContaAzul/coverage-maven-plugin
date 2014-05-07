@@ -14,11 +14,6 @@ import com.contaazul.coverage.cobertura.entity.Coverage;
 
 public class ParserTest {
 
-	@Test
-	public void testCreateInstance() throws Exception {
-		assertNotNull( new Parser() );
-	}
-
 	@Test(expected = CoberturaException.class)
 	public void testParseNullFile() throws Exception {
 		assertNull( new Parser().parse( null ) );

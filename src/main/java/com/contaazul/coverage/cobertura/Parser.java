@@ -12,8 +12,10 @@ import org.slf4j.LoggerFactory;
 import com.contaazul.coverage.cobertura.entity.Coverage;
 
 public class Parser {
-	private static final String ACCESS_EXTERNAL_DTD = "http://javax.xml.XMLConstants/property/accessExternalDTD";
-	private static final Logger logger = LoggerFactory.getLogger( Parser.class );
+	static {
+		System.setProperty("javax.xml.accessExternalDTD", "all");
+	}
+	private static final Logger logger = LoggerFactory.getLogger(Parser.class);
 	private JAXBContext jax;
 
 	public Parser() {
@@ -23,22 +25,21 @@ public class Parser {
 	public Coverage parse(File file) {
 		try {
 			logger.debug(String.format("Parsing %s...", file.getAbsolutePath()));
-			return (Coverage) createUnmarshaller().unmarshal( file );
+			return (Coverage) createUnmarshaller().unmarshal(file);
 		} catch (Exception e) {
-			throw new CoberturaException( "Cannot parse coverage.xml", e );
+			throw new CoberturaException("Cannot parse coverage.xml", e);
 		}
 	}
 
 	private Unmarshaller createUnmarshaller() throws JAXBException {
-		System.setProperty(ACCESS_EXTERNAL_DTD, "all");
 		return jax.createUnmarshaller();
 	}
 
 	private JAXBContext build() {
 		try {
-			return JAXBContext.newInstance( Coverage.class );
+			return JAXBContext.newInstance(Coverage.class);
 		} catch (JAXBException e) {
-			throw new CoberturaException( "Cannot create Parser instance", e );
+			throw new CoberturaException("Cannot create Parser instance", e);
 		}
 	}
 }
