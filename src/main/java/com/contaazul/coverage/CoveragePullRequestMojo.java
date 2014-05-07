@@ -54,21 +54,21 @@ public class CoveragePullRequestMojo extends AbstractMojo {
 	/**
 	 * The minimum % coverage accepted.
 	 * 
-	 * @parameter property="minCoverage" defaultValue="100"
+	 * @parameter property="minCoverage" default-value="100"
 	 */
 	private int minimumCoverage;
 
 	/**
 	 * Wheter to break or not the build when low coverage.
 	 * 
-	 * @parameter property="fail" defaultValue="false"
+	 * @parameter property="fail" default-value="false"
 	 */
 	private boolean breakOnLowCov;
 	
 	/**
 	 * Wheter to break or not the build when low coverage.
 	 * 
-	 * @parameter property="commentChunks" defaultValue="true"
+	 * @parameter property="commentChunks" default-value="true"
 	 */
 	private boolean commentChunks;
 
