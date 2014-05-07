@@ -37,7 +37,8 @@ mvn clean install cobertura:cobertura \
   -Dgithub.repositoryName=${REPOSITORY_NAME} \
   -Dgithub.oauth2=${YOUR_OAUTH2_KEY} \
   -Dfail=false \ # optional, defaults to true. If set to false, build will not break when in low coverage
-  -DminCoverage=90 # the minimum acceptable coverage
+  -DcommentChunks=true \ # optional, wether to comment or not in chunks with low coverage
+  -DminCoverage=90 # the minimum acceptable coverage, defaults to 100
 ```
 
 You can get a OAUTH2 key [here](https://github.com/settings/tokens/new).

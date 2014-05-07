@@ -10,8 +10,8 @@ import org.eclipse.egit.github.core.CommitFile;
 
 import com.contaazul.coverage.cobertura.LineCoverager;
 import com.contaazul.coverage.git.LinePositioner;
-import com.contaazul.coverage.pullrequest.ChunkBlammer;
 import com.contaazul.coverage.pullrequest.Cobertura;
+import com.contaazul.coverage.pullrequest.chunkblammer.ChunkBlammer;
 import com.google.common.collect.Lists;
 
 public class FileAnalyser {

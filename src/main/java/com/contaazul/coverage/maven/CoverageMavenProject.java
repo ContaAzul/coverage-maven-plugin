@@ -26,7 +26,7 @@ public class CoverageMavenProject {
 
 	public Coverage getCoverage() {
 		final File coverage = new File(getBuildDirectory() + COVERAGE_XML);
-		logger.info("coverage.xml file:: " + coverage.getAbsolutePath());
+		logger.debug("coverage.xml file:: " + coverage.getAbsolutePath());
 		if (!coverage.exists())
 			return new Coverage();
 		return new Parser().parse(coverage);

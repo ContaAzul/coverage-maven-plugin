@@ -5,8 +5,9 @@ import com.contaazul.coverage.github.GithubService;
 public class NonBuildBreakerPullRequestValidator extends
 		AbstractPullRequestValidator {
 
-	public NonBuildBreakerPullRequestValidator(GithubService gh, int minCoverage) {
-		super(gh, minCoverage);
+	public NonBuildBreakerPullRequestValidator(GithubService gh,
+			int minCoverage, boolean commentChunks) {
+		super(gh, minCoverage, commentChunks);
 	}
 
 	@Override

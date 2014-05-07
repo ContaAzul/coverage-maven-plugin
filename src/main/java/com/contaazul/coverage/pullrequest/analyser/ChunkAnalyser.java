@@ -9,9 +9,9 @@ import org.slf4j.LoggerFactory;
 
 import com.contaazul.coverage.cobertura.LineCoverager;
 import com.contaazul.coverage.git.LinePositioner;
-import com.contaazul.coverage.pullrequest.ChunkBlammer;
 import com.contaazul.coverage.pullrequest.Cobertura;
 import com.contaazul.coverage.pullrequest.CoberturaImpl;
+import com.contaazul.coverage.pullrequest.chunkblammer.ChunkBlammer;
 
 public class ChunkAnalyser {
 	private static final Logger logger = LoggerFactory

@@ -11,6 +11,7 @@ public class PullRequestValidatorBuilder {
 	private int pullRequestId = -1;
 	private GithubRepo repo;
 	private boolean breakOnLowCov = true;
+	private boolean commentChunks;
 
 	public PullRequestValidatorBuilder() {
 	}
@@ -49,13 +50,18 @@ public class PullRequestValidatorBuilder {
 
 	private PullRequestValidator create(final GithubService gh) {
 		if (breakOnLowCov)
-			return new BuildBreakerPullRequestValidator(gh, minCoverage);
+			return new BuildBreakerPullRequestValidator(gh, minCoverage, commentChunks);
 		else
-			return new NonBuildBreakerPullRequestValidator(gh, minCoverage);
+			return new NonBuildBreakerPullRequestValidator(gh, minCoverage, commentChunks);
 	}
 
 	private void validate() {
 		if (repo == null || oauth2 == null || pullRequestId < 1)
 			throw new CoverageException("Can't build GithubService.");
+	}
+
+	public PullRequestValidatorBuilder commentChunks(boolean commentChunks) {
+		this.commentChunks = commentChunks;
+		return this;
 	}
 }
