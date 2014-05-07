@@ -8,13 +8,17 @@
 	<packaging>maven-plugin</packaging>
 
 	<name>coverage-maven-plugin</name>
-	<url>http://maven.apache.org</url>
+	<url>http://carlosbecker.com/posts/mvn-pr-coverage-blammer/</url>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.6</maven.compiler.source>
 		<maven.compiler.target>1.6</maven.compiler.target>
 	</properties>
+
+	<scm>
+		<developerConnection>scm:git:git@github.com:caarlos0/coverage-maven-plugin.git</developerConnection>
+	</scm>
 
 	<dependencies>
 		<dependency>
@@ -80,9 +84,16 @@
 				<artifactId>cobertura-maven-plugin</artifactId>
 				<configuration>
 					<formats>
-						<format>html</format>
 						<format>xml</format>
 					</formats>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.5</version>
+				<configuration>
+					<tagNameFormat>v@{project.version}</tagNameFormat>
 				</configuration>
 			</plugin>
 		</plugins>
