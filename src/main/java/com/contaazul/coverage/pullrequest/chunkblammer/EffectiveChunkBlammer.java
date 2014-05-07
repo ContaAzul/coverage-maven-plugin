@@ -1,4 +1,4 @@
-package com.contaazul.coverage.pullrequest;
+package com.contaazul.coverage.pullrequest.chunkblammer;
 
 import org.eclipse.egit.github.core.CommitFile;
 import org.slf4j.Logger;
@@ -8,22 +8,24 @@ import com.contaazul.coverage.git.LinePositioner;
 import com.contaazul.coverage.github.GithubService;
 import com.contaazul.coverage.github.PullRequestCommitComment;
 import com.contaazul.coverage.github.PullRequestSHARetriever;
+import com.contaazul.coverage.pullrequest.Cobertura;
 import com.contaazul.coverage.pullrequest.analyser.ChunkAnalyser;
 
-public class ChunkBlammer {
+public class EffectiveChunkBlammer implements ChunkBlammer {
 	private static final Logger logger = LoggerFactory
 			.getLogger(ChunkAnalyser.class);
 	private final int minCoverage;
 	private final PullRequestSHARetriever shas;
 	private final GithubService gh;
 
-	public ChunkBlammer(GithubService gh, int minCoverage) {
+	public EffectiveChunkBlammer(GithubService gh, int minCoverage) {
 		super();
 		this.minCoverage = minCoverage;
 		this.gh = gh;
 		this.shas = new PullRequestSHARetriever(gh);
 	}
-
+	
+	@Override
 	public void blame(CommitFile file, Cobertura chunkCoverage,
 			LinePositioner positioner) {
 		if (chunkCoverage.isLowerThan(minCoverage))

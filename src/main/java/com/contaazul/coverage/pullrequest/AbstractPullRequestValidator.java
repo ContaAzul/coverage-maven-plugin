@@ -21,6 +21,9 @@ import com.contaazul.coverage.git.PatchLinePositioner;
 import com.contaazul.coverage.github.GithubService;
 import com.contaazul.coverage.maven.CoverageMavenProject;
 import com.contaazul.coverage.pullrequest.analyser.FileAnalyser;
+import com.contaazul.coverage.pullrequest.chunkblammer.ChunkBlammer;
+import com.contaazul.coverage.pullrequest.chunkblammer.DummyChunkBlammer;
+import com.contaazul.coverage.pullrequest.chunkblammer.EffectiveChunkBlammer;
 import com.google.common.collect.Lists;
 
 // XXX this class has too much responsibility.
@@ -32,10 +35,17 @@ public abstract class AbstractPullRequestValidator implements
 	private final GithubService gh;
 	private final ChunkBlammer blammer;
 
-	public AbstractPullRequestValidator(GithubService gh, int minCoverage) {
+	public AbstractPullRequestValidator(GithubService gh, int minCoverage,
+			boolean blameChunks) {
 		this.gh = gh;
 		this.minCoverage = minCoverage;
-		this.blammer = new ChunkBlammer(gh, minCoverage);
+		this.blammer = getBlammerImpl(gh, minCoverage, blameChunks);
+	}
+
+	private ChunkBlammer getBlammerImpl(GithubService gh, int minCoverage,
+			boolean blameChunks) {
+		return blameChunks ? new EffectiveChunkBlammer(gh, minCoverage)
+				: new DummyChunkBlammer();
 	}
 
 	/*
@@ -45,10 +55,9 @@ public abstract class AbstractPullRequestValidator implements
 	 */
 	@Override
 	public void validate(CoverageMavenProject project) {
-		final ClazzMapper mapper = new ClazzMapperImpl(project);
 		final List<Cobertura> coberturas = Lists.newArrayList();
 		for (CommitFile file : gh.getPullRequestCommitFiles())
-			addTo(coberturas, getCobertura(mapper, file));
+			addTo(coberturas, getCobertura(new ClazzMapperImpl(project), file));
 		checkTotalCoverage(map(coberturas), project);
 	}
 
@@ -83,8 +92,7 @@ public abstract class AbstractPullRequestValidator implements
 
 	private String format(Cobertura cobertura, CoverageMavenProject project) {
 		return String.format(PULL_REQUEST, project.getArtifactId(),
-				cobertura.getCoverage(),
-				minCoverage);
+				cobertura.getCoverage(), minCoverage);
 	}
 
 	protected abstract boolean breakOnLowCoverage();

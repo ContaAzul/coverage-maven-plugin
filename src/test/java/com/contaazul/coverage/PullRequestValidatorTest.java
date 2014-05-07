@@ -55,7 +55,7 @@ public class PullRequestValidatorTest {
 	public void testValidateInvalid() throws Exception {
 		when(clazz.getLines()).thenReturn(
 				Arrays.asList(new Line(10, 20, false, null, null)));
-		validator = new BuildBreakerPullRequestValidator(gh, 110);
+		validator = new BuildBreakerPullRequestValidator(gh, 110, true);
 		CoverageMavenProject project = mock(CoverageMavenProject.class);
 		when(project.getCoverage()).thenReturn(cov);
 		when(project.getSrcFolder()).thenReturn("src/main/java");
@@ -75,7 +75,7 @@ public class PullRequestValidatorTest {
 		f.setPatch(patch);
 		f.setFilename("src/main/java/com/contaazul/coverage/pullrequest/PullRequestValidatorImpl.java");
 		when(gh.getPullRequestCommitFiles()).thenReturn(Arrays.asList(f));
-		validator = new BuildBreakerPullRequestValidator(gh, 0);
+		validator = new BuildBreakerPullRequestValidator(gh, 0, true);
 		CoverageMavenProject project = mock(CoverageMavenProject.class);
 		when(project.getCoverage()).thenReturn(cov);
 		when(project.getSrcFolder()).thenReturn("src/main/java");

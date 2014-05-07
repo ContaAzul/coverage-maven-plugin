@@ -54,16 +54,23 @@ public class CoveragePullRequestMojo extends AbstractMojo {
 	/**
 	 * The minimum % coverage accepted.
 	 * 
-	 * @parameter property="minCoverage"
+	 * @parameter property="minCoverage" defaultValue="100"
 	 */
 	private int minimumCoverage;
 
 	/**
 	 * Wheter to break or not the build when low coverage.
 	 * 
-	 * @parameter property="fail"
+	 * @parameter property="fail" defaultValue="false"
 	 */
 	private boolean breakOnLowCov;
+	
+	/**
+	 * Wheter to break or not the build when low coverage.
+	 * 
+	 * @parameter property="commentChunks" defaultValue="true"
+	 */
+	private boolean commentChunks;
 
 	/**
 	 * Maven project info.
@@ -93,6 +100,7 @@ public class CoveragePullRequestMojo extends AbstractMojo {
 				.repository(new GithubRepo(repositoryName, repositoryOwner))
 				.minCoverage(minimumCoverage)
 				.breakOnLowCov(breakOnLowCov)
+				.commentChunks(commentChunks)
 				.build();
 		pr.validate(new CoverageMavenProject(project));
 

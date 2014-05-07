@@ -16,14 +16,14 @@ import org.mockito.Mock;
 
 import com.contaazul.coverage.cobertura.LineCoverager;
 import com.contaazul.coverage.git.LinePositioner;
-import com.contaazul.coverage.pullrequest.ChunkBlammer;
 import com.contaazul.coverage.pullrequest.Cobertura;
+import com.contaazul.coverage.pullrequest.chunkblammer.EffectiveChunkBlammer;
 import com.google.common.collect.Maps;
 
 public class ChunkAnalyserTest {
 
 	@Mock
-	private ChunkBlammer blammer;
+	private EffectiveChunkBlammer blammer;
 	@Mock
 	private LineCoverager coverager;
 	@Mock
